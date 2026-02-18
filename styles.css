@@ -27,7 +27,6 @@ body {
   padding-bottom: 12px;
   margin-bottom: 16px;
   background: transparent;
-
 }
 .header-actions {
   display: flex;
@@ -38,6 +37,11 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+.brand-name {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-size: 18px;
 }
 
 .logo {
