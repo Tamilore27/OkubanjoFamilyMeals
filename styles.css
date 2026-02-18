@@ -228,6 +228,20 @@ body {
   font-weight: 700;
   margin-bottom: 4px;
 }
+.dropdown-panel {
+  margin-top: 8px;
+  padding: 10px 12px;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #eef0f6;
+  font-size: 13px;
+  color: #333;
+}
+
+.hidden {
+  display: none;
+}
+
 
 @media (max-width: 900px) {
   .meal-row {
