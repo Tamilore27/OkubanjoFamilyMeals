@@ -1,1 +1,36 @@
-x
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Okubizzy Meal Planner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header class="header">
+  <div class="brand">
+    <div class="brand-name">Okubizzy</div>
+    <div class="brand-tagline">family meal planner</div>
+  </div>
+
+  <div class="header-actions">
+    <button id="generateWeekBtn" class="pill">Generate New Week</button>
+    <div class="tabs">
+      <button class="tab active" id="tabToday">Today</button>
+      <button class="tab" id="tabWeek">Week</button>
+      <button class="tab" id="tabShopping">Shopping List</button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="week-days" id="weekDays"></div>
+  <main id="app"></main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
