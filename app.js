@@ -1,3 +1,47 @@
+const defaultWeek = [
+  {
+    day: "Mon",
+    breakfast: "Cereal / Sandwich",
+    kidsLunch: "Jollof + chicken",
+    officeLunch: "Leftovers",
+    dinner: "Salmon + stir-fry veg + potatoes",
+    image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2"
+  },
+  {
+    day: "Tue",
+    breakfast: "Cereal / Sandwich",
+    kidsLunch: "Butter chicken + rice",
+    officeLunch: "Leftovers",
+    dinner: "White rice + efo + chicken",
+    image: "https://images.unsplash.com/photo-1604908177522-040f7b8d3f35"
+  },
+  {
+    day: "Wed",
+    breakfast: "Cereal / Sandwich",
+    kidsLunch: "Pasta bolognese",
+    officeLunch: "Leftovers",
+    dinner: "Porridge (with fish)",
+    image: "https://images.unsplash.com/photo-1603133872878-684f6d2f9b45"
+  },
+  {
+    day: "Thu",
+    breakfast: "Cereal / Sandwich",
+    kidsLunch: "Jollof + fish",
+    officeLunch: "Leftovers",
+    dinner: "Eba + okra",
+    image: "https://images.unsplash.com/photo-1625944526184-fb0cfe19c56d"
+  },
+  {
+    day: "Fri",
+    breakfast: "Cereal / Sandwich",
+    kidsLunch: "Fried rice",
+    officeLunch: "Chicken salad",
+    dinner: "Grilled fish + potatoes",
+    image: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe"
+  }
+];
+
+
 const themes = ["jollof", "swallow", "fried-rice", "white-rice-efo"];
 const saladRotation = ["chicken", "beef", "shrimp"];
 
