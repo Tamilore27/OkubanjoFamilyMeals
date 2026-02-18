@@ -3,12 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <title>Okubanjo Family Meals</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
   <header class="header">
-    <h1>Family Meals</h1>
+    <div>
+      <h1>Family Meals</h1>
+      <small>Family of 4</small>
+    </div>
+
     <div class="tabs">
       <button class="tab active" id="tabToday">Today</button>
       <button class="tab" id="tabWeek">Week</button>
@@ -16,19 +21,21 @@
     </div>
   </header>
 
-  <button id="generateWeekBtn" class="primary-btn">🔁 Generate New Week</button>
+  <div class="controls">
+    <button id="generateWeekBtn" class="primary-btn">🔁 Generate New Week</button>
 
-  <div class="week-days">
-    <button class="day-btn active">Mon</button>
-    <button class="day-btn">Tue</button>
-    <button class="day-btn">Wed</button>
-    <button class="day-btn">Thu</button>
-    <button class="day-btn">Fri</button>
-    <button class="day-btn">Sat</button>
-    <button class="day-btn">Sun</button>
+    <div class="week-days">
+      <button class="day-btn">Mon</button>
+      <button class="day-btn">Tue</button>
+      <button class="day-btn">Wed</button>
+      <button class="day-btn">Thu</button>
+      <button class="day-btn">Fri</button>
+      <button class="day-btn">Sat</button>
+      <button class="day-btn">Sun</button>
+    </div>
   </div>
 
-  <div id="weekView"></div>
+  <main id="app"></main>
 
   <script src="app.js"></script>
 </body>
