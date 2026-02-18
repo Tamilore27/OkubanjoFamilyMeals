@@ -1,141 +1,126 @@
-const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-const todayIndex = new Date().getDay() === 0 ? 6 : new Date().getDay() - 1;
-let activeDay = days[todayIndex];
+const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+let activeDay = days[(new Date().getDay() + 6) % 7];
 let activeTab = "Today";
 
-const meals = {
-  Wed: {
-    breakfast: { title: "Cereal / Sandwich", kcal: 420, img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd" },
-    lunch: { title: "Kids: Fried Rice • Office: Chicken Salad", kcal: 600, img: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe" },
-    dinner: { title: "Porridge (Fish)", kcal: 780, img: "https://images.unsplash.com/photo-1600891964599-f61ba0e24092" }
-  }
+const foodPool = {
+  breakfast: [
+    { name: "Cereal / Sandwich", kcal: 420, ingredients: ["Milk","Bread","Cereal"] },
+    { name: "Yam & Egg", kcal: 520, ingredients: ["Yam","Eggs","Oil"] }
+  ],
+  lunch: [
+    { main: "Fried Rice", kids: "Fried Rice + Chicken", office: "Chicken Salad", kcal: 600, ingredients: ["Rice","Chicken","Veggies"] },
+    { main: "Jollof Rice", kids: "Jollof + Chicken", office: "Jollof + Beef", kcal: 650, ingredients: ["Rice","Tomato","Chicken","Beef"] }
+  ],
+  dinner: [
+    { name: "Porridge (Fish)", kcal: 780, ingredients: ["Yam","Fish","Pepper"] },
+    { name: "Salmon & Veggies", kcal: 700, ingredients: ["Salmon","Veggies","Potatoes"] }
+  ]
 };
 
-function renderDays() {
-  const container = document.getElementById("weekDays");
-  container.innerHTML = "";
+let weekPlan = {};
+
+function generateWeek() {
+  weekPlan = {};
   days.forEach(d => {
-    const btn = document.createElement("button");
-    btn.className = "day-btn" + (d === activeDay ? " active" : "");
-    btn.textContent = d;
-    btn.onclick = () => {
-      activeDay = d;
-      setActiveDay();
-      render();
+    weekPlan[d] = {
+      breakfast: pick(foodPool.breakfast),
+      lunch: pick(foodPool.lunch),
+      dinner: pick(foodPool.dinner)
     };
-    container.appendChild(btn);
+  });
+  render();
+}
+
+function pick(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function renderDays() {
+  const el = document.getElementById("weekDays");
+  el.innerHTML = "";
+  days.forEach(d => {
+    const b = document.createElement("button");
+    b.className = "day-btn" + (d === activeDay ? " active" : "");
+    b.textContent = d;
+    b.onclick = () => { activeDay = d; renderDays(); render(); };
+    el.appendChild(b);
   });
 }
 
-function setActiveDay() {
-  document.querySelectorAll(".day-btn").forEach(btn => {
-    btn.classList.toggle("active", btn.textContent === activeDay);
-  });
+function card(label, meal, isLunch) {
+  return `
+  <div class="meal-card">
+    <img src="https://source.unsplash.com/600x400/?food,${meal.name || meal.main}" />
+    <div class="meal-body">
+      <div class="meal-header">
+        <div>
+          <div class="meal-title">${label}</div>
+          <div class="meal-name">${meal.name || meal.main}</div>
+        </div>
+        <span class="kcal">${meal.kcal} kcal</span>
+      </div>
+
+      <div class="dropdowns">
+        <button class="pill" onclick="toggleDrop(this)">Ingredients</button>
+        ${isLunch ? `<button class="pill" onclick="toggleDrop(this)">Kids Lunch</button>
+                     <button class="pill" onclick="toggleDrop(this)">Office Lunch</button>` : ``}
+      </div>
+
+      <div class="dropdown-panel hidden"></div>
+    </div>
+  </div>`;
 }
 
-function setActiveTab(id) {
-  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
+function toggleDrop(btn) {
+  btn.classList.toggle("active");
+  const panel = btn.closest(".meal-body").querySelector(".dropdown-panel");
+  panel.classList.toggle("hidden");
+
+  const meal = weekPlan[activeDay].lunch;
+  if (btn.innerText === "Ingredients") panel.innerHTML = meal.ingredients.join(", ");
+  if (btn.innerText === "Kids Lunch") panel.innerHTML = meal.kids;
+  if (btn.innerText === "Office Lunch") panel.innerHTML = meal.office;
 }
 
 function render() {
+  const d = weekPlan[activeDay];
   const app = document.getElementById("app");
-  const d = meals[activeDay];
 
   if (activeTab === "Today") {
     app.innerHTML = `
       <div class="meal-row">
-        ${card("Breakfast", d.breakfast, false)}
+        ${card("Breakfast", d.breakfast)}
         ${card("Lunch", d.lunch, true)}
-        ${card("Dinner", d.dinner, false)}
-      </div>
-    `;
+        ${card("Dinner", d.dinner)}
+      </div>`;
   }
 
   if (activeTab === "Week") {
     app.innerHTML = `
       <div class="week-view">
-        ${stackedCard("Breakfast", d.breakfast, false)}
-        ${stackedCard("Lunch", d.lunch, true)}
-        ${stackedCard("Dinner", d.dinner, false)}
-      </div>
-    `;
+        ${card("Breakfast", d.breakfast)}
+        ${card("Lunch", d.lunch, true)}
+        ${card("Dinner", d.dinner)}
+      </div>`;
   }
 
   if (activeTab === "Shopping") {
-    app.innerHTML = `<h2>Shopping List (coming next)</h2>`;
+    const items = new Set();
+    Object.values(weekPlan).forEach(day => {
+      [...day.breakfast.ingredients, ...day.lunch.ingredients, ...day.dinner.ingredients].forEach(i => items.add(i));
+    });
+    items.add("Milk");
+    items.add("Eggs");
+
+    app.innerHTML = `<h3>Monthly Shopping List</h3><ul>${[...items].map(i=>`<li>${i}</li>`).join("")}</ul>`;
   }
 }
 
-function card(label, item, isLunch) {
-  return `
-    <div class="meal-card">
-      <img src="${item.img}" />
-      <div class="meal-body">
-        <div class="meal-header">
-          <div>
-            <div class="meal-title">${label}</div>
-            <div class="meal-name">${item.title}</div>
-          </div>
-          <span class="kcal">${item.kcal} kcal</span>
-        </div>
+document.getElementById("tabToday").onclick = () => { activeTab="Today"; render(); };
+document.getElementById("tabWeek").onclick = () => { activeTab="Week"; render(); };
+document.getElementById("tabShopping").onclick = () => { activeTab="Shopping"; render(); };
+document.getElementById("generateWeekBtn").onclick = () => generateWeek();
 
-        <div class="dropdowns">
-          ${pill("Ingredients")}
-          ${isLunch ? pill("Kids Lunch") + pill("Office Lunch") : ""}
-        </div>
-
-        <div class="dropdown-panel hidden"></div>
-      </div>
-    </div>
-  `;
-}
-
-function stackedCard(label, item, isLunch) {
-  return card(label, item, isLunch);
-}
-
-function pill(label) {
-  return `<button class="pill" onclick="toggleDrop(this)">${label}</button>`;
-}
-
-function toggleDrop(btn) {
-  document.querySelectorAll(".pill").forEach(b => b.classList.remove("active"));
-  btn.classList.add("active");
-
-  const panel = btn.closest(".meal-body").querySelector(".dropdown-panel");
-  panel.classList.toggle("hidden");
-
-  if (btn.textContent === "Ingredients") {
-    panel.innerHTML = `<ul><li>Rice</li><li>Chicken</li><li>Vegetables</li></ul>`;
-  } else if (btn.textContent === "Kids Lunch") {
-    panel.innerHTML = `<ul><li>Small portion</li><li>Fruit snack</li></ul>`;
-  } else {
-    panel.innerHTML = `<ul><li>Adult portion</li><li>Extra protein</li></ul>`;
-  }
-}
-
-document.getElementById("tabToday").onclick = () => {
-  activeTab = "Today";
-  setActiveTab("tabToday");
-  render();
-};
-
-document.getElementById("tabWeek").onclick = () => {
-  activeTab = "Week";
-  setActiveTab("tabWeek");
-  render();
-};
-
-document.getElementById("tabShopping").onclick = () => {
-  activeTab = "Shopping";
-  setActiveTab("tabShopping");
-  render();
-};
-
-document.getElementById("generateWeekBtn").onclick = () => {
-  document.getElementById("generateWeekBtn").classList.toggle("active");
-};
-
+generateWeek();
 renderDays();
 render();
