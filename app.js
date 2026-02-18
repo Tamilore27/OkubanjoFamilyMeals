@@ -76,7 +76,10 @@ function render() {
 function card(label, item) {
   return `
     <div class="meal-card">
-      <img src="${item.img}" />
+      <img 
+        src="${item.img}" 
+        onerror="this.src='https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=1200&auto=format&fit=crop'" 
+      />
       <div class="meal-body">
         <div class="meal-header">
           <div>
@@ -90,10 +93,14 @@ function card(label, item) {
   `;
 }
 
+
 function stackedCard(label, item) {
   return `
     <div class="meal-card" style="margin-bottom:16px;">
-      <img src="${item.img}" />
+      <img 
+        src="${item.img}" 
+        onerror="this.src='https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=1200&auto=format&fit=crop'" 
+      />
       <div class="meal-body">
         <div class="meal-header">
           <div>
@@ -112,6 +119,7 @@ function stackedCard(label, item) {
     </div>
   `;
 }
+
 
 
 
