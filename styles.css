@@ -110,7 +110,14 @@ body {
   background: #eef2ff;
   border-color: #c9d7ff;
 }
-
+/* Week view image sizing */
+.week-view .meal-card img {
+  width: 75%;
+  max-width: 900px;
+  margin: 0 auto;
+  display: block;
+  border-radius: 16px;
+}
 
 .week-days {
   display: flex;
