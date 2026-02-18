@@ -127,6 +127,10 @@ document.getElementById("generateWeekBtn")
   .addEventListener("click", generateWeek);
 
 const saved = localStorage.getItem("currentWeek");
+
 if (saved) {
   renderWeek(JSON.parse(saved), "saved");
+} else {
+  renderWeek(defaultWeek, "default");
 }
+
