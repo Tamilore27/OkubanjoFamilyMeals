@@ -66,10 +66,11 @@ body {
 .controls {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
   margin-bottom: 16px;
 }
+
 
 /* Replace the green primary button style */
 .primary-btn {
