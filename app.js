@@ -103,21 +103,21 @@ function generateWeek() {
   });
 
   localStorage.setItem("currentWeek", JSON.stringify(week));
-  renderWeek(week, theme);
-}
-
 function renderWeek(week, theme) {
   const container = document.getElementById("weekView");
-  container.innerHTML = `<h3>Theme: ${theme.replace("-", " ").toUpperCase()}</h3>`;
+  container.innerHTML = `<h3>Theme: ${theme.toUpperCase()}</h3>`;
 
   week.forEach(d => {
     container.innerHTML += `
-      <div class="day-card">
-        <strong>${d.day}</strong><br/>
-        🍳 Breakfast: ${d.breakfast}<br/>
-        🍱 Kids Lunch: ${d.kidsLunch}<br/>
-        👔 Office Lunch: ${d.officeLunch}<br/>
-        🍽️ Dinner: ${d.dinner}
+      <div class="meal-card">
+        <img src="${d.image || 'https://images.unsplash.com/photo-1490645935967-10de6ba17061'}" />
+        <div class="meal-body">
+          <h4>${d.day}</h4>
+          <p><strong>Breakfast:</strong> ${d.breakfast}</p>
+          <p><strong>Kids Lunch:</strong> ${d.kidsLunch}</p>
+          <p><strong>Office Lunch:</strong> ${d.officeLunch}</p>
+          <p><strong>Dinner:</strong> ${d.dinner}</p>
+        </div>
       </div>
     `;
   });
