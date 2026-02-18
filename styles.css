@@ -1,191 +1,106 @@
-:root {
-  --purple: #b388ff;
-  --purple-bg: #efe6ff;
-  --line: rgba(0,0,0,0.08);
-}
-
-* { box-sizing: border-box; }
-
 body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   margin: 0;
-  font-family: Inter, sans-serif;
-  background: linear-gradient(135deg, #fdeff2, #eef6ff);
-  color: #111;
+  background: #f7f7fb;
 }
 
-/* Sticky Header */
 .header {
   position: sticky;
   top: 0;
-  z-index: 50;
-  background: linear-gradient(135deg, #fdeff2, #eef6ff);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 24px;
-  border-bottom: 1px solid var(--line);
-}
-
-.brand-name {
-  font-family: "Playfair Display", serif;
-  font-size: 22px;
-  font-weight: 700;
-  line-height: 1.1;
-}
-
-.brand-tagline {
-  font-size: 12px;
-  color: #777;
-  margin-top: 2px;
-}
-
-.header-actions {
+  background: white;
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  z-index: 10;
 }
 
 .tabs {
+  margin-left: auto;
   display: flex;
-  gap: 6px;
+  gap: 8px;
 }
 
-.container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 16px;
+.tab, .pill {
+  border-radius: 999px;
+  padding: 8px 14px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+}
+
+.tab.active, .pill.active, .day-btn.active {
+  background: #efe7ff;
+  border-color: #b69cff;
+}
+
+.primary {
+  border-color: #ddd;
 }
 
 .week-days {
   display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  margin-bottom: 16px;
+  gap: 8px;
+  padding: 12px 16px;
 }
 
-.tab, .pill, .day-btn {
-  background: #fff;
-  border: 1px solid #e6e9f2;
+.day-btn {
   border-radius: 999px;
-  padding: 7px 12px;
-  font-size: 13px;
+  padding: 6px 12px;
+  border: 1px solid #ddd;
+  background: white;
   cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease;
 }
 
-.tab.active,
-.pill.active,
-.day-btn.active {
-  border-color: var(--purple);
-  background: var(--purple-bg);
-  color: #4b2ca3;
-}
-
-/* Cards */
 .meal-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
+  padding: 16px;
 }
 
 .meal-card {
-  background: #fff;
+  background: white;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
 
 .meal-card img {
   width: 100%;
-  height: 180px;
+  height: 160px;
   object-fit: cover;
-  display: block;
 }
 
 .meal-body {
-  padding: 12px 14px;
+  padding: 12px;
 }
 
 .meal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 10px;
-}
-
-.meal-title {
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #777;
-}
-
-.meal-name {
-  font-weight: 700;
-  font-size: 16px;
 }
 
 .kcal {
-  background: #fff3cd;
-  padding: 4px 10px;
+  background: #fff3c4;
+  padding: 4px 8px;
   border-radius: 999px;
   font-size: 12px;
-  white-space: nowrap;
 }
 
 .dropdowns {
-  margin-top: 10px;
+  margin-top: 8px;
   display: flex;
   gap: 6px;
-  flex-wrap: wrap;
 }
 
 .dropdown-panel {
-  margin-top: 10px;
-  padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid #eef0f6;
-  background: #fff;
-  font-size: 13px;
+  margin-top: 8px;
+  padding: 8px;
+  border-radius: 10px;
+  background: #f3f3f8;
 }
 
 .hidden { display: none; }
-
-/* Week view: stacked cards narrower & centered */
-.week-view .meal-card {
-  max-width: 75%;
-  margin: 0 auto 16px;
-}
-
-/* Shopping */
-.shop-wrap {
-  background: #fff;
-  border-radius: 16px;
-  padding: 14px;
-  box-shadow: 0 12px 28px rgba(0,0,0,0.10);
-}
-
-.shop-wrap h2 {
-  margin: 0 0 10px;
-  font-size: 18px;
-}
-
-.shop-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-}
-
-.shop-item {
-  border: 1px solid #eef0f6;
-  border-radius: 12px;
-  padding: 10px;
-  font-size: 14px;
-}
-
-@media (max-width: 900px) {
-  .meal-row { grid-template-columns: 1fr; }
-  .week-view .meal-card { max-width: 100%; }
-  .shop-grid { grid-template-columns: 1fr; }
-}
-
