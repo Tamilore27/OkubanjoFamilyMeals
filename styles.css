@@ -44,6 +44,19 @@ body {
   background: #f2e8ff;
   border-color: #caa7ff;
 }
+.pill {
+  background: #f5f7fb;
+  border: 1px solid #e3e6ef;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  margin-right: 6px;
+}
+
+.pill:hover {
+  background: #eef2ff;
+}
 
 .controls {
   display: flex;
