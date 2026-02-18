@@ -75,7 +75,7 @@ if (activeTab === "Week") {
   }
 }
 
-function card(label, item) {
+function card(label, item, isLunch = false) {
   return `
     <div class="meal-card">
       <img 
@@ -90,13 +90,24 @@ function card(label, item) {
           </div>
           <span class="kcal">${item.kcal || 600} kcal</span>
         </div>
+
+        <div class="dropdowns">
+          <button class="pill" onclick="toggleDrop(this)">Ingredients</button>
+          ${isLunch ? `
+            <button class="pill" onclick="toggleDrop(this)">Kids Lunch</button>
+            <button class="pill" onclick="toggleDrop(this)">Office Lunch</button>
+          ` : ``}
+        </div>
+
+        <div class="dropdown-panel hidden">
+          <div class="drop-content">Loading...</div>
+        </div>
       </div>
     </div>
   `;
 }
 
-
-function stackedCard(label, item) {
+function stackedCard(label, item, isLunch = false) {
   return `
     <div class="meal-card" style="margin-bottom:16px;">
       <img 
@@ -113,16 +124,20 @@ function stackedCard(label, item) {
         </div>
 
         <div class="dropdowns">
-          <button class="pill">Ingredients</button>
-          <button class="pill">Kids Lunch</button>
-          <button class="pill">Office Lunch</button>
+          <button class="pill" onclick="toggleDrop(this)">Ingredients</button>
+          ${isLunch ? `
+            <button class="pill" onclick="toggleDrop(this)">Kids Lunch</button>
+            <button class="pill" onclick="toggleDrop(this)">Office Lunch</button>
+          ` : ``}
+        </div>
+
+        <div class="dropdown-panel hidden">
+          <div class="drop-content">Loading...</div>
         </div>
       </div>
     </div>
   `;
 }
-
-
 
 
 /* Tabs */
