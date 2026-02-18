@@ -53,9 +53,9 @@ function render() {
     app.innerHTML = `
       <h2>Today (${activeDay})</h2>
       <div class="meal-row">
-        ${card("Breakfast", dayMeals.breakfast)}
-        ${card("Lunch", dayMeals.lunch)}
-        ${card("Dinner", dayMeals.dinner)}
+    ${card("Breakfast", dayMeals.breakfast, false)}
+    ${card("Lunch", dayMeals.lunch, true)}
+    ${card("Dinner", dayMeals.dinner, false)}}
       </div>
     `;
   }
