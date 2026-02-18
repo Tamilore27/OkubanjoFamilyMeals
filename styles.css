@@ -1,4 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+:root {
+  --purple: #b388ff;
+  --purple-bg: #efe6ff;
+}
 
 * { box-sizing: border-box; }
 
@@ -9,32 +12,28 @@ body {
   color: #111;
 }
 
+/* Sticky Header */
 .header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: linear-gradient(135deg, #fdeff2, #eef6ff);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 24px;
+  padding: 14px 24px;
   border-bottom: 1px solid rgba(0,0,0,0.08);
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.brand-logo {
-  height: 36px;
-}
-
 .brand-name {
-  font-weight: 800;
-  font-size: 20px;
+  font-family: "Playfair Display", serif;
+  font-size: 22px;
+  font-weight: 700;
 }
 
 .brand-tagline {
   font-size: 12px;
-  color: #7a7a7a;
+  color: #777;
 }
 
 .header-actions {
@@ -55,11 +54,15 @@ body {
   padding: 6px 12px;
   font-size: 13px;
   cursor: pointer;
+  transition: all 0.15s ease;
 }
 
-.tab.active {
-  border-color: #caa7ff;
-  background: #f2e8ff;
+.tab.active,
+.pill.active,
+.day-btn.active {
+  border-color: var(--purple);
+  background: var(--purple-bg);
+  color: #4b2ca3;
 }
 
 .container {
@@ -73,11 +76,6 @@ body {
   gap: 6px;
   margin-bottom: 16px;
   flex-wrap: wrap;
-}
-
-.day-btn.active {
-  border-color: #7bb8ff;
-  background: #e6f0ff;
 }
 
 .meal-row {
@@ -127,12 +125,14 @@ body {
   padding: 4px 10px;
   border-radius: 999px;
   font-size: 12px;
+  white-space: nowrap;
 }
 
 .dropdowns {
   margin-top: 8px;
   display: flex;
   gap: 6px;
+  flex-wrap: wrap;
 }
 
 .dropdown-panel {
