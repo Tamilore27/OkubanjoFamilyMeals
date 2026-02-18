@@ -1,213 +1,100 @@
 const meals = {
-  Mon: {
-    breakfast: { title: "Cereal / Sandwich", img: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2" },
-    lunch: { title: "Kids: Jollof + Chicken • Office: Leftovers", img: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe" },
-    dinner: { title: "Salmon + Stir-fry Veg + Potatoes", img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd" }
-  },
-  Tue: {
-    breakfast: { title: "Cereal / Sandwich", img: "https://images.unsplash.com/photo-1490645935967-10de6ba17061" },
-    lunch: { title: "Kids: Pasta Bolognese • Office: Leftovers", img: "https://images.unsplash.com/photo-1603133872878-684f6d2f9b45" },
-    dinner: { title: "White Rice + Efo + Chicken", img: "https://images.unsplash.com/photo-1625944526184-fb0cfe19c56d" }
-  },
   Wed: {
-    breakfast: { title: "Cereal / Sandwich", img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd" },
-    lunch: { title: "Kids: Fried Rice • Office: Chicken Salad", img: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe" },
-    dinner: { title: "Porridge (Fish)", img: "https://images.unsplash.com/photo-1600891964599-f61ba0e24092" }
-  },
-  Thu: {
-    breakfast: { title: "Cereal / Sandwich", img: "https://images.unsplash.com/photo-1490645935967-10de6ba17061" },
-    lunch: { title: "Kids: Jollof + Fish • Office: Leftovers", img: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe" },
-    dinner: { title: "Eba + Okra", img: "https://images.unsplash.com/photo-1625944526184-fb0cfe19c56d" }
-  },
-  Fri: {
-    breakfast: { title: "Cereal / Sandwich", img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd" },
-    lunch: { title: "Kids: Fried Rice • Office: Shrimp Salad", img: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe" },
-    dinner: { title: "Grilled Fish + Potatoes", img: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe" }
-  },
-  Sat: {
-    breakfast: { title: "Akara + Pap", img: "https://images.unsplash.com/photo-1490645935967-10de6ba17061" },
-    lunch: { title: "Leftovers", img: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe" },
-    dinner: { title: "Fried Rice + Chicken", img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd" }
-  },
-  Sun: {
-    breakfast: { title: "Yam & Egg", img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd" },
-    lunch: { title: "Light Snacks", img: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe" },
-    dinner: { title: "Jollof Rice + Beef", img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd" }
+    breakfast: { title: "Cereal / Sandwich", kcal: 420, img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd" },
+    lunch: { title: "Kids: Fried Rice • Office: Chicken Salad", kcal: 600, img: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe" },
+    dinner: { title: "Porridge (Fish)", kcal: 780, img: "https://images.unsplash.com/photo-1600891964599-f61ba0e24092" }
   }
 };
 
-const app = document.getElementById("app");
 let activeTab = "Today";
-let activeDay = getToday();
-
-function getToday() {
-  return ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date().getDay()];
-}
+let activeDay = "Wed";
 
 function render() {
-  app.innerHTML = "";
-
-  const dayMeals = meals[activeDay];
+  const app = document.getElementById("app");
+  const d = meals[activeDay];
 
   if (activeTab === "Today") {
     app.innerHTML = `
       <h2>Today (${activeDay})</h2>
       <div class="meal-row">
-    ${card("Breakfast", dayMeals.breakfast, false)}
-    ${card("Lunch", dayMeals.lunch, true)}
-    ${card("Dinner", dayMeals.dinner, false)}}
+        ${card("Breakfast", d.breakfast, false)}
+        ${card("Lunch", d.lunch, true)}
+        ${card("Dinner", d.dinner, false)}
       </div>
     `;
   }
 
-if (activeTab === "Week") {
-  app.innerHTML = `
-    <div class="week-view">
-    ${stackedCard("Breakfast", dayMeals.breakfast, false)}
-    ${stackedCard("Lunch", dayMeals.lunch, true)}
-    ${stackedCard("Dinner", dayMeals.dinner, false)}
-    </div>
-  `;
-}
+  if (activeTab === "Week") {
+    app.innerHTML = `
+      <div class="week-view">
+        ${stackedCard("Breakfast", d.breakfast, false)}
+        ${stackedCard("Lunch", d.lunch, true)}
+        ${stackedCard("Dinner", d.dinner, false)}
+      </div>
+    `;
+  }
 
   if (activeTab === "Shopping") {
-    app.innerHTML = `<h2>Shopping List</h2><p>Coming next…</p>`;
+    app.innerHTML = `<h2>Shopping List (coming next)</h2>`;
   }
 }
 
-function card(label, item, isLunch = false) {
+function card(label, item, isLunch) {
   return `
     <div class="meal-card">
-      <img 
-        src="${item.img}" 
-        onerror="this.src='https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=1200&auto=format&fit=crop'" 
-      />
+      <img src="${item.img}" />
       <div class="meal-body">
         <div class="meal-header">
           <div>
             <div class="meal-title">${label}</div>
             <div class="meal-name">${item.title}</div>
           </div>
-          <span class="kcal">${item.kcal || 600} kcal</span>
+          <span class="kcal">${item.kcal} kcal</span>
         </div>
 
         <div class="dropdowns">
           <button class="pill" onclick="toggleDrop(this)">Ingredients</button>
-          ${isLunch ? `
-            <button class="pill" onclick="toggleDrop(this)">Kids Lunch</button>
-            <button class="pill" onclick="toggleDrop(this)">Office Lunch</button>
-          ` : ``}
+          ${isLunch ? `<button class="pill" onclick="toggleDrop(this)">Kids Lunch</button>
+                       <button class="pill" onclick="toggleDrop(this)">Office Lunch</button>` : ``}
         </div>
 
         <div class="dropdown-panel hidden">
-          <div class="drop-content">Loading...</div>
+          <div class="drop-content"></div>
         </div>
       </div>
     </div>
   `;
 }
 
-function stackedCard(label, item, isLunch = false) {
-  return `
-    <div class="meal-card" style="margin-bottom:16px;">
-      <img 
-        src="${item.img}" 
-        onerror="this.src='https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=1200&auto=format&fit=crop'" 
-      />
-      <div class="meal-body">
-        <div class="meal-header">
-          <div>
-            <div class="meal-title">${label}</div>
-            <div class="meal-name">${item.title}</div>
-          </div>
-          <span class="kcal">${item.kcal || 600} kcal</span>
-        </div>
-
-        <div class="dropdowns">
-          <button class="pill" onclick="toggleDrop(this)">Ingredients</button>
-          ${isLunch ? `
-            <button class="pill" onclick="toggleDrop(this)">Kids Lunch</button>
-            <button class="pill" onclick="toggleDrop(this)">Office Lunch</button>
-          ` : ``}
-        </div>
-
-        <div class="dropdown-panel hidden">
-          <div class="drop-content">Loading...</div>
-        </div>
-      </div>
-    </div>
-  `;
+function stackedCard(label, item, isLunch) {
+  return card(label, item, isLunch);
 }
 
-
-/* Tabs */
-document.getElementById("tabToday").onclick = () => {
-  setActiveTab("Today");
-};
-document.getElementById("tabWeek").onclick = () => {
-  setActiveTab("Week");
-};
-document.getElementById("tabShopping").onclick = () => {
-  setActiveTab("Shopping");
-};
-
-function setActiveTab(tab) {
-  activeTab = tab;
-  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-  document.getElementById(`tab${tab}`).classList.add("active");
-  render();
-}
-
-/* Day buttons */
-document.querySelectorAll(".day-btn").forEach(btn => {
-  btn.onclick = () => {
-    document.querySelectorAll(".day-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    activeDay = btn.innerText;
-    render();
-  };
-});
-
-/* Generate New Week (placeholder for now) */
-document.getElementById("generateWeekBtn").onclick = () => {
-  alert("Generate New Week logic comes next 🙂");
-};
 function toggleDrop(btn) {
   const panel = btn.closest(".meal-body").querySelector(".dropdown-panel");
   panel.classList.toggle("hidden");
 
-  // Optional: Change content based on button clicked
   const label = btn.innerText;
   const content = panel.querySelector(".drop-content");
 
   if (label === "Ingredients") {
-    content.innerHTML = `
-      <ul>
-        <li>Rice</li>
-        <li>Chicken</li>
-        <li>Vegetables</li>
-      </ul>
-    `;
+    content.innerHTML = `<ul><li>Rice</li><li>Chicken</li><li>Vegetables</li></ul>`;
   }
-
   if (label === "Kids Lunch") {
-    content.innerHTML = `
-      <ul>
-        <li>Kids portion of meal</li>
-        <li>Fruit snack</li>
-      </ul>
-    `;
+    content.innerHTML = `<ul><li>Smaller portion</li><li>Fruit snack</li></ul>`;
   }
-
   if (label === "Office Lunch") {
-    content.innerHTML = `
-      <ul>
-        <li>Adult portion</li>
-        <li>Extra protein</li>
-      </ul>
-    `;
+    content.innerHTML = `<ul><li>Adult portion</li><li>Extra protein</li></ul>`;
   }
 }
 
-/* Initial render */
+document.getElementById("tabToday").onclick = () => { activeTab = "Today"; setTab("tabToday"); render(); };
+document.getElementById("tabWeek").onclick = () => { activeTab = "Week"; setTab("tabWeek"); render(); };
+document.getElementById("tabShopping").onclick = () => { activeTab = "Shopping"; setTab("tabShopping"); render(); };
+
+function setTab(id) {
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
 render();
