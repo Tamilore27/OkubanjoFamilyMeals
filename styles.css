@@ -24,6 +24,9 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
 }
 
 .tabs {
@@ -43,7 +46,19 @@ body {
 .tab.active {
   background: #f2e8ff;
   border-color: #caa7ff;
+  position: relative;
 }
+.tab.active::after {
+  content: "";
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  bottom: -8px;
+  height: 2px;
+  background: #caa7ff;
+  border-radius: 999px;
+}
+
 /* Pills for Ingredients / Kids / Office */
 .pill {
   background: #f6f7fb;
