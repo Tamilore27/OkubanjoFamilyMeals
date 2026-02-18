@@ -1,7 +1,13 @@
 // ---------- Constants ----------
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 // Weekly rice themes (only one rice type per week)
-const RICE_THEMES = ["Jollof Rice", "Fried Rice", "White Rice"];
+const RICE_THEMES = [
+  "Jollof Rice",
+  "Fried Rice",
+  "White Rice",
+  "White Rice & Beans"
+];
+
 
 // Save last week's metadata to avoid repeats
 function loadLastWeekMeta() {
@@ -52,7 +58,8 @@ const POOL = {
     { main: "Pasta Bolognese", kids: "Pasta Bolognese", office: "Pasta Bolognese", ingredients: ["pasta","beef","tomato"], carbHeavy: true }
   ],
   dinnerProtein: [
-    { name: "Salmon & Stir-fry Veg + Potatoes", ingredients: ["fish","veggies","potato"] },
+    { name: "Salmon + Stir-fry Veg + Potatoes", ingredients: ["fish","veggies","potato"] },
+    { name: "Chicken + Stir-fry Veg + Potatoes", ingredients: ["chicken","veggies","potato"] },
     { name: "Grilled Fish & Potatoes", ingredients: ["fish","potato"] },
     { name: "Lamb Chops & Potatoes", ingredients: ["lamb","potato"] },
     { name: "Burger & Salad", ingredients: ["beef","salad","bread"] }
@@ -158,6 +165,10 @@ function generateNewWeek() {
     }
 
     if (POOL.dinnerSwallow.find(s => s.name === dinner.name)) swallowUsed++;
+    if (d === "Sun") {
+  dinnerPool = dinnerPool.filter(x => !x.name.toLowerCase().includes("rice"));
+}
+
 
     lastDinner = dinner.name;
 
