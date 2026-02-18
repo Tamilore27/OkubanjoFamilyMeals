@@ -71,15 +71,23 @@ body {
   margin-bottom: 16px;
 }
 
+/* Replace the green primary button style */
 .primary-btn {
-  padding: 10px 16px;
-  background: #1f7a4f;
-  color: white;
-  border: none;
-  border-radius: 8px;
+  background: #f6f7fb;
+  border: 1px solid #e6e9f2;
+  border-radius: 999px;          /* match day pills */
+  padding: 8px 14px;
   font-weight: 600;
+  color: #333;
   cursor: pointer;
+  box-shadow: none;
 }
+
+.primary-btn:hover {
+  background: #eef2ff;
+  border-color: #c9d7ff;
+}
+
 
 .week-days {
   display: flex;
