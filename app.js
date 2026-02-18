@@ -5,7 +5,11 @@ const defaultWeek = [
     kidsLunch: "Jollof + chicken",
     officeLunch: "Leftovers",
     dinner: "Salmon + stir-fry veg + potatoes",
-    image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2"
+    images: {
+      breakfast: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2",
+      lunch: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe",
+      dinner: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd"
+    }
   },
   {
     day: "Tue",
@@ -13,7 +17,11 @@ const defaultWeek = [
     kidsLunch: "Butter chicken + rice",
     officeLunch: "Leftovers",
     dinner: "White rice + efo + chicken",
-    image: "https://images.unsplash.com/photo-1604908177522-040f7b8d3f35"
+    images: {
+      breakfast: "https://images.unsplash.com/photo-1490645935967-10de6ba17061",
+      lunch: "https://images.unsplash.com/photo-1604908177522-040f7b8d3f35",
+      dinner: "https://images.unsplash.com/photo-1625944526184-fb0cfe19c56d"
+    }
   },
   {
     day: "Wed",
@@ -21,7 +29,11 @@ const defaultWeek = [
     kidsLunch: "Pasta bolognese",
     officeLunch: "Leftovers",
     dinner: "Porridge (with fish)",
-    image: "https://images.unsplash.com/photo-1603133872878-684f6d2f9b45"
+    images: {
+      breakfast: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd",
+      lunch: "https://images.unsplash.com/photo-1603133872878-684f6d2f9b45",
+      dinner: "https://images.unsplash.com/photo-1600891964599-f61ba0e24092"
+    }
   },
   {
     day: "Thu",
@@ -29,7 +41,11 @@ const defaultWeek = [
     kidsLunch: "Jollof + fish",
     officeLunch: "Leftovers",
     dinner: "Eba + okra",
-    image: "https://images.unsplash.com/photo-1625944526184-fb0cfe19c56d"
+    images: {
+      breakfast: "https://images.unsplash.com/photo-1490645935967-10de6ba17061",
+      lunch: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe",
+      dinner: "https://images.unsplash.com/photo-1625944526184-fb0cfe19c56d"
+    }
   },
   {
     day: "Fri",
@@ -37,14 +53,16 @@ const defaultWeek = [
     kidsLunch: "Fried rice",
     officeLunch: "Chicken salad",
     dinner: "Grilled fish + potatoes",
-    image: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe"
+    images: {
+      breakfast: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd",
+      lunch: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe",
+      dinner: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe"
+    }
   }
 ];
 
-
 const themes = ["jollof", "swallow", "fried-rice", "white-rice-efo"];
 const saladRotation = ["chicken", "beef", "shrimp"];
-
 let saladIndex = Number(localStorage.getItem("saladIndex") || 0);
 
 const meals = {
@@ -84,53 +102,56 @@ function generateWeek() {
     let dinner = randomPick(meals.dinners);
 
     if (dinner.includes("Eba") || dinner.includes("Poundo")) {
-      if (swallowUsed) {
-        dinner = "Salmon + stir-fry veg + potatoes";
-      } else {
-        swallowUsed = true;
-      }
+      if (swallowUsed) dinner = "Salmon + stir-fry veg + potatoes";
+      swallowUsed = true;
     }
 
     return {
       day,
       breakfast: "Cereal / Sandwich",
       kidsLunch: randomPick(meals.kidsLunchAllowed),
-      officeLunch: i === 4
-        ? `${saladProtein} salad`
-        : "Leftovers",
-      dinner
+      officeLunch: i === 4 ? `${saladProtein} salad` : "Leftovers",
+      dinner,
+      images: defaultWeek.find(d => d.day === day)?.images || defaultWeek[0].images
     };
   });
 
   localStorage.setItem("currentWeek", JSON.stringify(week));
+  renderWeek(week, theme);
+}
+
 function renderWeek(week, theme) {
   const container = document.getElementById("weekView");
   container.innerHTML = `<h3>Theme: ${theme.toUpperCase()}</h3>`;
 
   week.forEach(d => {
     container.innerHTML += `
-      <div class="meal-card">
-        <img src="${d.image || 'https://images.unsplash.com/photo-1490645935967-10de6ba17061'}" />
-        <div class="meal-body">
-          <h4>${d.day}</h4>
-          <p><strong>Breakfast:</strong> ${d.breakfast}</p>
-          <p><strong>Kids Lunch:</strong> ${d.kidsLunch}</p>
-          <p><strong>Office Lunch:</strong> ${d.officeLunch}</p>
-          <p><strong>Dinner:</strong> ${d.dinner}</p>
+      <h4>${d.day}</h4>
+      <div class="meal-row">
+        <div class="meal-card">
+          <img src="${d.images.breakfast}" />
+          <div class="meal-body"><strong>Breakfast</strong><br/>${d.breakfast}</div>
+        </div>
+
+        <div class="meal-card">
+          <img src="${d.images.lunch}" />
+          <div class="meal-body"><strong>Lunch</strong><br/>Kids: ${d.kidsLunch}<br/>Office: ${d.officeLunch}</div>
+        </div>
+
+        <div class="meal-card">
+          <img src="${d.images.dinner}" />
+          <div class="meal-body"><strong>Dinner</strong><br/>${d.dinner}</div>
         </div>
       </div>
     `;
   });
 }
 
-document.getElementById("generateWeekBtn")
-  .addEventListener("click", generateWeek);
+document.getElementById("generateWeekBtn").addEventListener("click", generateWeek);
 
 const saved = localStorage.getItem("currentWeek");
-
 if (saved) {
   renderWeek(JSON.parse(saved), "saved");
 } else {
   renderWeek(defaultWeek, "default");
 }
-
