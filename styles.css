@@ -1,189 +1,109 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+* { box-sizing: border-box; }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: linear-gradient(135deg, #fdeff2, #eef6ff);
-}
-.container {
-  max-width: 1100px;
-  margin: 0 auto;
-}
-* {
-  box-sizing: border-box;
-}
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   margin: 0;
-  padding: 16px;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
   background: linear-gradient(135deg, #fdeff2, #eef6ff);
+  color: #111;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(0,0,0,0.08) !important;
-  padding-bottom: 12px;
-  margin-bottom: 16px;
-  background: transparent;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
 }
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+
 .brand {
   display: flex;
   align-items: center;
   gap: 10px;
 }
+
+.brand-logo {
+  height: 36px;
+}
+
 .brand-name {
   font-weight: 800;
-  letter-spacing: -0.02em;
-  font-size: 18px;
+  font-size: 20px;
 }
 
-.logo {
-  position: relative;
-  font-weight: 900;
-  font-size: 22px;
-  letter-spacing: -0.03em;
+.brand-tagline {
+  font-size: 12px;
+  color: #7a7a7a;
 }
 
-.logo-ok {
-  font-size: 28px;
-  color: #111;
-}
-
-.logo-text {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  background: linear-gradient(90deg, #8ab4ff, #caa7ff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.header-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
 .tabs {
   display: flex;
-  gap: 8px;
+  gap: 6px;
 }
 
-.tab {
-  padding: 8px 14px;
-  border-radius: 999px;
-  border: 1px solid #ddd;
+.tab, .pill, .day-btn {
   background: white;
+  border: 1px solid #e6e9f2;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 13px;
   cursor: pointer;
-  font-weight: 600;
 }
 
 .tab.active {
-  background: #f2e8ff;
   border-color: #caa7ff;
-  position: relative;
-}
-.tab.active::after {
-  content: "";
-  position: absolute;
-  left: 20%;
-  right: 20%;
-  bottom: -8px;
-  height: 2px;
-  background: #caa7ff;
-  border-radius: 999px;
+  background: #f2e8ff;
 }
 
-/* Pills for Ingredients / Kids / Office */
-.pill {
-  background: #f6f7fb;
-  border: 1px solid #e6e9f2;
-  border-radius: 999px;          /* soft edges */
-  padding: 6px 12px;
-  font-size: 12px;
-  font-weight: 500;
-  color: #333;
-  cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease;
-}
-
-.pill:hover {
-  background: #eef2ff;
-  border-color: #c9d7ff;
-}
-
-
-.controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 16px;
-}
-
-
-/* Replace the green primary button style */
-.primary-btn {
-  background: white;
-  border: 1px solid #e6e9f2;
-  border-radius: 999px;          /* match day pills */
-  padding: 8px 14px;
-  font-weight: 600;
-  color: #333;
-  cursor: pointer;
-  box-shadow: none;
-}
-
-.primary-btn:hover {
-  background: #eef2ff;
-  border-color: #c9d7ff;
-}
-/* Week view image sizing */
-.week-view .meal-card img {
-  width: 75%;
-  max-width: 900px;
+.container {
+  max-width: 1100px;
   margin: 0 auto;
-  display: block;
-  border-radius: 16px;
+  padding: 16px;
 }
 
 .week-days {
   display: flex;
   gap: 6px;
+  margin-bottom: 16px;
   flex-wrap: wrap;
 }
 
-.day-btn {
-  padding: 6px 10px;
-  border-radius: 999px;
-  border: 1px solid #ddd;
-  background: white;
-  cursor: pointer;
-  font-size: 12px;
-}
-
 .day-btn.active {
+  border-color: #7bb8ff;
   background: #e6f0ff;
-  border-color: #8ab4ff;
 }
 
-/* Cards */
 .meal-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
-  margin-bottom: 24px;
 }
 
 .meal-card {
-  border-radius: 18px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.12);
 }
+
+.meal-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+.meal-body {
+  padding: 12px 14px;
+}
+
 .meal-header {
   display: flex;
   justify-content: space-between;
@@ -191,60 +111,42 @@ body {
 }
 
 .meal-title {
-  font-size: 12px;
-  letter-spacing: 0.08em;
+  font-size: 11px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #7a7a7a;
+  color: #777;
 }
 
 .meal-name {
-  font-size: 18px;
   font-weight: 700;
-  margin-top: 4px;
+  font-size: 16px;
 }
-
 
 .kcal {
   background: #fff3cd;
-  color: #8a6d3b;
-  font-size: 12px;
   padding: 4px 10px;
   border-radius: 999px;
-  font-weight: 600;
+  font-size: 12px;
 }
 
-
-.meal-card img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
+.dropdowns {
+  margin-top: 8px;
+  display: flex;
+  gap: 6px;
 }
 
-.meal-body {
-  padding: 12px 14px;
-}
-
-.meal-title {
-  font-weight: 700;
-  margin-bottom: 4px;
-}
 .dropdown-panel {
   margin-top: 8px;
   padding: 10px 12px;
-  background: #ffffff;
   border-radius: 12px;
   border: 1px solid #eef0f6;
+  background: #fff;
   font-size: 13px;
-  color: #333;
 }
 
-.hidden {
-  display: none;
-}
+.hidden { display: none; }
 
-
-@media (max-width: 900px) {
-  .meal-row {
-    grid-template-columns: 1fr;
-  }
+.week-view .meal-card {
+  max-width: 75%;
+  margin: 0 auto 16px;
 }
