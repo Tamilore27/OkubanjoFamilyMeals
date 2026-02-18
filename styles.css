@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+
 :root {
   --purple: #b388ff;
   --purple-bg: #efe6ff;
@@ -29,11 +31,13 @@ body {
   font-family: "Playfair Display", serif;
   font-size: 22px;
   font-weight: 700;
+  line-height: 1.1;
 }
 
 .brand-tagline {
   font-size: 12px;
   color: #777;
+  margin-top: 2px;
 }
 
 .header-actions {
@@ -48,13 +52,13 @@ body {
 }
 
 .tab, .pill, .day-btn {
-  background: white;
+  background: #fff;
   border: 1px solid #e6e9f2;
   border-radius: 999px;
   padding: 6px 12px;
   font-size: 13px;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background 0.15s ease, border-color 0.15s ease;
 }
 
 .tab.active,
@@ -78,6 +82,7 @@ body {
   flex-wrap: wrap;
 }
 
+/* Cards */
 .meal-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -85,7 +90,7 @@ body {
 }
 
 .meal-card {
-  background: white;
+  background: #fff;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 12px 28px rgba(0,0,0,0.12);
@@ -106,6 +111,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 10px;
 }
 
 .meal-title {
@@ -146,7 +152,15 @@ body {
 
 .hidden { display: none; }
 
+/* Week view: keep cards narrower */
 .week-view .meal-card {
   max-width: 75%;
   margin: 0 auto 16px;
+}
+
+/* Mobile */
+@media (max-width: 900px) {
+  .meal-row {
+    grid-template-columns: 1fr;
+  }
 }
