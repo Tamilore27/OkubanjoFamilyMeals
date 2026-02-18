@@ -97,9 +97,18 @@ function loadWeek() {
 
 // ---------- Generator (Rules enforced) ----------
 function generateNewWeek() {
+  const lastMeta = loadLastWeekMeta();
+
+  // Pick a rice theme different from last week
+  let riceTheme = RICE_THEMES[Math.floor(Math.random() * RICE_THEMES.length)];
+  if (lastMeta?.riceTheme === riceTheme) {
+    riceTheme = RICE_THEMES.find(t => t !== riceTheme) || riceTheme;
+  }
+
   const week = {};
   let swallowUsed = 0;
-  let saladProteinIdx = Math.floor(Math.random() * POOL.saladProteins.length);
+  let lastDinner = null;
+  let consecutiveDinnerCount = 0;
 
   DAYS.forEach((d, idx) => {
     const isWeekend = d === "Sat" || d === "Sun";
@@ -108,42 +117,63 @@ function generateNewWeek() {
       ? randPick(POOL.breakfastWeekend)
       : randPick(POOL.breakfastWeekday);
 
-    const lunch = randPick(POOL.lunch);
+    // ---- LUNCH: enforce rice theme ----
+    let lunchPool = POOL.lunch.filter(l => l.main.includes(riceTheme) || !l.main.includes("Rice"));
+    let lunch = randPick(lunchPool);
 
-    let dinner;
+    // Butter Chicken kids-only
+    if (lunch.main === "White Rice & Butter Chicken") {
+      lunch.office = "Leftovers";
+    }
 
-    // Friday fun rotation
+    // ---- DINNER: avoid repeats & enforce rules ----
+    let dinnerPool = [...POOL.dinnerProtein, ...POOL.dinnerRice];
+
+    // Friday fun
     if (d === "Fri") {
-      dinner = randPick(POOL.fridayFun);
-    } else if (lunch.carbHeavy) {
-      // Carb-heavy lunch -> protein-forward dinner
-      dinner = randPick(POOL.dinnerProtein);
+      dinnerPool = POOL.fridayFun;
+    }
+
+    // Carb-heavy lunch → protein-forward dinner
+    if (lunch.carbHeavy) {
+      dinnerPool = POOL.dinnerProtein;
+    }
+
+    // Swallow max once
+    if (swallowUsed < 1 && Math.random() < 0.25) {
+      dinnerPool = POOL.dinnerSwallow;
+    }
+
+    let dinner = randPick(dinnerPool);
+
+    // No more than 2 consecutive same dinners
+    if (lastDinner && dinner.name === lastDinner) {
+      consecutiveDinnerCount++;
+      if (consecutiveDinnerCount >= 2) {
+        dinner = randPick(dinnerPool.filter(x => x.name !== lastDinner));
+        consecutiveDinnerCount = 0;
+      }
     } else {
-      // Mix rice + protein dinners
-      const mix = Math.random() < 0.6 ? POOL.dinnerRice : POOL.dinnerProtein;
-      dinner = randPick(mix);
+      consecutiveDinnerCount = 1;
     }
 
-    // Swallow max once per week
-    if (Math.random() < 0.25 && swallowUsed < 1) {
-      dinner = randPick(POOL.dinnerSwallow);
-      swallowUsed++;
-    }
+    if (POOL.dinnerSwallow.find(s => s.name === dinner.name)) swallowUsed++;
 
-    // One salad office lunch per week
-    if (idx === 2) { // midweek salad
-      const protein = POOL.saladProteins[saladProteinIdx % POOL.saladProteins.length];
-      lunch.office = `${protein.charAt(0).toUpperCase() + protein.slice(1)} Salad`;
-      lunch.ingredients = Array.from(new Set([...lunch.ingredients, "salad", protein]));
-      saladProteinIdx++;
-    }
+    lastDinner = dinner.name;
 
     week[d] = { breakfast, lunch, dinner };
+  });
+
+  // Save meta to avoid repeating next week
+  saveLastWeekMeta({
+    riceTheme,
+    dinners: Object.values(week).map(d => d.dinner.name)
   });
 
   saveWeek();
   return week;
 }
+
 
 // ---------- UI + Rendering ----------
 function buildDays() {
