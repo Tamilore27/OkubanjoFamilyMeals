@@ -60,13 +60,15 @@ function render() {
     `;
   }
 
-  if (activeTab === "Week") {
-    app.innerHTML = `
+if (activeTab === "Week") {
+  app.innerHTML = `
+    <div class="week-view">
       ${stackedCard("Breakfast", dayMeals.breakfast)}
       ${stackedCard("Lunch", dayMeals.lunch)}
       ${stackedCard("Dinner", dayMeals.dinner)}
-    `;
-  }
+    </div>
+  `;
+}
 
   if (activeTab === "Shopping") {
     app.innerHTML = `<h2>Shopping List</h2><p>Coming next…</p>`;
