@@ -44,19 +44,24 @@ body {
   background: #f2e8ff;
   border-color: #caa7ff;
 }
+/* Pills for Ingredients / Kids / Office */
 .pill {
-  background: #f5f7fb;
-  border: 1px solid #e3e6ef;
-  border-radius: 999px;
-  padding: 6px 10px;
+  background: #f6f7fb;
+  border: 1px solid #e6e9f2;
+  border-radius: 999px;          /* soft edges */
+  padding: 6px 12px;
   font-size: 12px;
+  font-weight: 500;
+  color: #333;
   cursor: pointer;
-  margin-right: 6px;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .pill:hover {
   background: #eef2ff;
+  border-color: #c9d7ff;
 }
+
 
 .controls {
   display: flex;
