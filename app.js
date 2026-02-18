@@ -103,10 +103,17 @@ function stackedCard(label, item) {
           </div>
           <span class="kcal">${item.kcal || 600} kcal</span>
         </div>
+
+        <div class="dropdowns">
+          <button class="pill">Ingredients</button>
+          <button class="pill">Kids Lunch</button>
+          <button class="pill">Office Lunch</button>
+        </div>
       </div>
     </div>
   `;
 }
+
 
 
 /* Tabs */
