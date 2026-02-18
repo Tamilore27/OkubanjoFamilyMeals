@@ -51,8 +51,10 @@ function card(label, meal, isLunch) {
   const imgMap = {
      "Cereal / Sandwich": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd",
     "Yam & Egg": "https://images.unsplash.com/photo-1584270354949-1a98fbb0d4e7",
-    "Fried Rice": "https://images.unsplash.com/photo-1603133872878-684f6d2f9b45",
-    "Jollof Rice": "https://images.unsplash.com/photo-1604908177522-040f7b8d3f35",
+    //"Fried Rice": "https://images.unsplash.com/photo-1603133872878-684f6d2f9b45",
+    "Jollof Rice": "./images/JollofRice.jpg",
+     "Fried Rice": "./images/FriedRice.jpg",
+    //"Jollof Rice": "https://images.unsplash.com/photo-1604908177522-040f7b8d3f35",
     "Porridge (Fish)": "https://images.unsplash.com/photo-1600891964599-f61ba0e24092",
     "Salmon & Veggies": "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2"
   };
