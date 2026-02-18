@@ -125,7 +125,7 @@ body {
 
 /* Replace the green primary button style */
 .primary-btn {
-  background: #f6f7fb;
+  background: white;
   border: 1px solid #e6e9f2;
   border-radius: 999px;          /* match day pills */
   padding: 8px 14px;
