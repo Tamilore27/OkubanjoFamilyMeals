@@ -1,14 +1,19 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  margin: 0;
   padding: 16px;
-  background: #f6f7fb;
+  background: linear-gradient(135deg, #fdeff2, #eef6ff);
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
 .tabs {
@@ -22,28 +27,35 @@ body {
   border: 1px solid #ddd;
   background: white;
   cursor: pointer;
+  font-weight: 600;
 }
 
 .tab.active {
-  background: #f0e6ff;
-  border-color: #c9a7ff;
+  background: #f2e8ff;
+  border-color: #caa7ff;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
 }
 
 .primary-btn {
-  padding: 12px 16px;
+  padding: 10px 16px;
   background: #1f7a4f;
   color: white;
   border: none;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  margin: 12px 0;
 }
 
 .week-days {
   display: flex;
   gap: 6px;
-  margin-bottom: 16px;
   flex-wrap: wrap;
 }
 
@@ -57,33 +69,38 @@ body {
 }
 
 .day-btn.active {
-  background: #e6f4ff;
-  border-color: #7bb8ff;
+  background: #e6f0ff;
+  border-color: #8ab4ff;
 }
 
+/* Cards */
 .meal-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
+  gap: 16px;
   margin-bottom: 24px;
 }
 
 .meal-card {
   background: white;
-  border-radius: 14px;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.12);
 }
 
 .meal-card img {
   width: 100%;
-  height: 160px;
+  height: 180px;
   object-fit: cover;
 }
 
 .meal-body {
-  padding: 10px 12px;
-  font-size: 14px;
+  padding: 12px 14px;
+}
+
+.meal-title {
+  font-weight: 700;
+  margin-bottom: 4px;
 }
 
 @media (max-width: 900px) {
