@@ -34,7 +34,36 @@ body {
   align-items: center;
   gap: 10px;
 }
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
+.logo {
+  position: relative;
+  font-weight: 900;
+  font-size: 22px;
+  letter-spacing: -0.03em;
+}
+
+.logo-ok {
+  font-size: 28px;
+  color: #111;
+}
+
+.logo-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #8ab4ff, #caa7ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
 .tabs {
   display: flex;
