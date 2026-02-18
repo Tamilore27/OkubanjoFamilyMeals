@@ -1,3 +1,8 @@
+const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const todayIndex = new Date().getDay() === 0 ? 6 : new Date().getDay() - 1;
+let activeDay = days[todayIndex];
+let activeTab = "Today";
+
 const meals = {
   Wed: {
     breakfast: { title: "Cereal / Sandwich", kcal: 420, img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd" },
@@ -6,8 +11,32 @@ const meals = {
   }
 };
 
-let activeTab = "Today";
-let activeDay = "Wed";
+function renderDays() {
+  const container = document.getElementById("weekDays");
+  container.innerHTML = "";
+  days.forEach(d => {
+    const btn = document.createElement("button");
+    btn.className = "day-btn" + (d === activeDay ? " active" : "");
+    btn.textContent = d;
+    btn.onclick = () => {
+      activeDay = d;
+      setActiveDay();
+      render();
+    };
+    container.appendChild(btn);
+  });
+}
+
+function setActiveDay() {
+  document.querySelectorAll(".day-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.textContent === activeDay);
+  });
+}
+
+function setActiveTab(id) {
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
 
 function render() {
   const app = document.getElementById("app");
@@ -15,7 +44,6 @@ function render() {
 
   if (activeTab === "Today") {
     app.innerHTML = `
-      <h2>Today (${activeDay})</h2>
       <div class="meal-row">
         ${card("Breakfast", d.breakfast, false)}
         ${card("Lunch", d.lunch, true)}
@@ -53,14 +81,11 @@ function card(label, item, isLunch) {
         </div>
 
         <div class="dropdowns">
-          <button class="pill" onclick="toggleDrop(this)">Ingredients</button>
-          ${isLunch ? `<button class="pill" onclick="toggleDrop(this)">Kids Lunch</button>
-                       <button class="pill" onclick="toggleDrop(this)">Office Lunch</button>` : ``}
+          ${pill("Ingredients")}
+          ${isLunch ? pill("Kids Lunch") + pill("Office Lunch") : ""}
         </div>
 
-        <div class="dropdown-panel hidden">
-          <div class="drop-content"></div>
-        </div>
+        <div class="dropdown-panel hidden"></div>
       </div>
     </div>
   `;
@@ -70,31 +95,47 @@ function stackedCard(label, item, isLunch) {
   return card(label, item, isLunch);
 }
 
+function pill(label) {
+  return `<button class="pill" onclick="toggleDrop(this)">${label}</button>`;
+}
+
 function toggleDrop(btn) {
+  document.querySelectorAll(".pill").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+
   const panel = btn.closest(".meal-body").querySelector(".dropdown-panel");
   panel.classList.toggle("hidden");
 
-  const label = btn.innerText;
-  const content = panel.querySelector(".drop-content");
-
-  if (label === "Ingredients") {
-    content.innerHTML = `<ul><li>Rice</li><li>Chicken</li><li>Vegetables</li></ul>`;
-  }
-  if (label === "Kids Lunch") {
-    content.innerHTML = `<ul><li>Smaller portion</li><li>Fruit snack</li></ul>`;
-  }
-  if (label === "Office Lunch") {
-    content.innerHTML = `<ul><li>Adult portion</li><li>Extra protein</li></ul>`;
+  if (btn.textContent === "Ingredients") {
+    panel.innerHTML = `<ul><li>Rice</li><li>Chicken</li><li>Vegetables</li></ul>`;
+  } else if (btn.textContent === "Kids Lunch") {
+    panel.innerHTML = `<ul><li>Small portion</li><li>Fruit snack</li></ul>`;
+  } else {
+    panel.innerHTML = `<ul><li>Adult portion</li><li>Extra protein</li></ul>`;
   }
 }
 
-document.getElementById("tabToday").onclick = () => { activeTab = "Today"; setTab("tabToday"); render(); };
-document.getElementById("tabWeek").onclick = () => { activeTab = "Week"; setTab("tabWeek"); render(); };
-document.getElementById("tabShopping").onclick = () => { activeTab = "Shopping"; setTab("tabShopping"); render(); };
+document.getElementById("tabToday").onclick = () => {
+  activeTab = "Today";
+  setActiveTab("tabToday");
+  render();
+};
 
-function setTab(id) {
-  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-}
+document.getElementById("tabWeek").onclick = () => {
+  activeTab = "Week";
+  setActiveTab("tabWeek");
+  render();
+};
 
+document.getElementById("tabShopping").onclick = () => {
+  activeTab = "Shopping";
+  setActiveTab("tabShopping");
+  render();
+};
+
+document.getElementById("generateWeekBtn").onclick = () => {
+  document.getElementById("generateWeekBtn").classList.toggle("active");
+};
+
+renderDays();
 render();
