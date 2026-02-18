@@ -62,7 +62,6 @@ function render() {
 
   if (activeTab === "Week") {
     app.innerHTML = `
-      <h2>${activeDay}</h2>
       ${stackedCard("Breakfast", dayMeals.breakfast)}
       ${stackedCard("Lunch", dayMeals.lunch)}
       ${stackedCard("Dinner", dayMeals.dinner)}
