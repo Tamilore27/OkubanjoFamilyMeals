@@ -6,11 +6,27 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <h1>🍽️ Okubanjo Family Weekly Meals</h1>
 
-  <button id="generateWeekBtn" class="primary-btn">
-    🔁 Generate New Week
-  </button>
+  <header class="header">
+    <h1>Family Meals</h1>
+    <div class="tabs">
+      <button class="tab active" id="tabToday">Today</button>
+      <button class="tab" id="tabWeek">Week</button>
+      <button class="tab" id="tabShopping">Shopping List</button>
+    </div>
+  </header>
+
+  <button id="generateWeekBtn" class="primary-btn">🔁 Generate New Week</button>
+
+  <div class="week-days">
+    <button class="day-btn active">Mon</button>
+    <button class="day-btn">Tue</button>
+    <button class="day-btn">Wed</button>
+    <button class="day-btn">Thu</button>
+    <button class="day-btn">Fri</button>
+    <button class="day-btn">Sat</button>
+    <button class="day-btn">Sun</button>
+  </div>
 
   <div id="weekView"></div>
 
