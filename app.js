@@ -1,5 +1,21 @@
 // ---------- Constants ----------
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+// Weekly rice themes (only one rice type per week)
+const RICE_THEMES = ["Jollof Rice", "Fried Rice", "White Rice"];
+
+// Save last week's metadata to avoid repeats
+function loadLastWeekMeta() {
+  try {
+    return JSON.parse(localStorage.getItem("okubizzy_last_week_meta"));
+  } catch {
+    return null;
+  }
+}
+
+function saveLastWeekMeta(meta) {
+  localStorage.setItem("okubizzy_last_week_meta", JSON.stringify(meta));
+}
+
 const todayIdx = (new Date().getDay() + 6) % 7; // Mon=0 ... Sun=6
 let activeDay = DAYS[todayIdx];
 let activeTab = "Today";
