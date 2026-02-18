@@ -172,6 +172,42 @@ document.querySelectorAll(".day-btn").forEach(btn => {
 document.getElementById("generateWeekBtn").onclick = () => {
   alert("Generate New Week logic comes next 🙂");
 };
+function toggleDrop(btn) {
+  const panel = btn.closest(".meal-body").querySelector(".dropdown-panel");
+  panel.classList.toggle("hidden");
+
+  // Optional: Change content based on button clicked
+  const label = btn.innerText;
+  const content = panel.querySelector(".drop-content");
+
+  if (label === "Ingredients") {
+    content.innerHTML = `
+      <ul>
+        <li>Rice</li>
+        <li>Chicken</li>
+        <li>Vegetables</li>
+      </ul>
+    `;
+  }
+
+  if (label === "Kids Lunch") {
+    content.innerHTML = `
+      <ul>
+        <li>Kids portion of meal</li>
+        <li>Fruit snack</li>
+      </ul>
+    `;
+  }
+
+  if (label === "Office Lunch") {
+    content.innerHTML = `
+      <ul>
+        <li>Adult portion</li>
+        <li>Extra protein</li>
+      </ul>
+    `;
+  }
+}
 
 /* Initial render */
 render();
