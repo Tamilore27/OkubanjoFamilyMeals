@@ -49,7 +49,7 @@ function renderDays() {
 
 function card(label, meal, isLunch) {
   const imgMap = {
-    "Cereal / Sandwich": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd",
+     "Cereal / Sandwich": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd",
     "Yam & Egg": "https://images.unsplash.com/photo-1584270354949-1a98fbb0d4e7",
     "Fried Rice": "https://images.unsplash.com/photo-1603133872878-684f6d2f9b45",
     "Jollof Rice": "https://images.unsplash.com/photo-1604908177522-040f7b8d3f35",
@@ -57,30 +57,33 @@ function card(label, meal, isLunch) {
     "Salmon & Veggies": "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2"
   };
 
+  // pick image from map or fallback
   const img = imgMap[meal.name || meal.main] 
     || "https://images.unsplash.com/photo-1490645935967-10de6ba17061";
 
   return `
-  <div class="meal-card">
-    <img src="${img}" />
-    <div class="meal-body">
-      <div class="meal-header">
-        <div>
-          <div class="meal-title">${label}</div>
-          <div class="meal-name">${meal.name || meal.main}</div>
+    <div class="meal-card">
+      <img src="${img}" />
+      <div class="meal-body">
+        <div class="meal-header">
+          <div>
+            <div class="meal-title">${label}</div>
+            <div class="meal-name">${meal.name || meal.main}</div>
+          </div>
+          <span class="kcal">${meal.kcal} kcal</span>
         </div>
-        <span class="kcal">${meal.kcal} kcal</span>
-      </div>
 
-      <div class="dropdowns">
-        <button class="pill" onclick="toggleDrop(this)">Ingredients</button>
-        ${isLunch ? `<button class="pill" onclick="toggleDrop(this)">Kids Lunch</button>
-                     <button class="pill" onclick="toggleDrop(this)">Office Lunch</button>` : ``}
-      </div>
+        <div class="dropdowns">
+          <button class="pill" onclick="toggleDrop(this)">Ingredients</button>
+          ${isLunch ? `<button class="pill" onclick="toggleDrop(this)">Kids Lunch</button>
+                       <button class="pill" onclick="toggleDrop(this)">Office Lunch</button>` : ``}
+        </div>
 
-      <div class="dropdown-panel hidden"></div>
+        <div class="dropdown-panel hidden"></div>
+      </div>
     </div>
-  </div>`;
+  `;
+}
 }
 
 function toggleDrop(btn) {
