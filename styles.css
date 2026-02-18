@@ -95,6 +95,25 @@ body {
   border-radius: 18px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.08);
 }
+.meal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.meal-title {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #7a7a7a;
+}
+
+.meal-name {
+  font-size: 18px;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
 
 .kcal {
   background: #fff3cd;
