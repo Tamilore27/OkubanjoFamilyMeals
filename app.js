@@ -48,9 +48,21 @@ function renderDays() {
 }
 
 function card(label, meal, isLunch) {
+  const imgMap = {
+    "Cereal / Sandwich": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd",
+    "Yam & Egg": "https://images.unsplash.com/photo-1584270354949-1a98fbb0d4e7",
+    "Fried Rice": "https://images.unsplash.com/photo-1603133872878-684f6d2f9b45",
+    "Jollof Rice": "https://images.unsplash.com/photo-1604908177522-040f7b8d3f35",
+    "Porridge (Fish)": "https://images.unsplash.com/photo-1600891964599-f61ba0e24092",
+    "Salmon & Veggies": "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2"
+  };
+
+  const img = imgMap[meal.name || meal.main] 
+    || "https://images.unsplash.com/photo-1490645935967-10de6ba17061";
+
   return `
   <div class="meal-card">
-    <img src="https://source.unsplash.com/600x400/?food,${meal.name || meal.main}" />
+    <img src="${img}" />
     <div class="meal-body">
       <div class="meal-header">
         <div>
