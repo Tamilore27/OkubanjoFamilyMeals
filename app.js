@@ -148,50 +148,103 @@ function generateNewWeek(){
 
 let weekPlan = loadWeek() || generateNewWeek();
 
-/************
- * UI Render
- ************/
-function card(label, meal, isLunch){
-  const title = isLunch ? meal.main : meal.name;
-  const kcal = approxCalories(meal.ingredients);
-  const img = getImg(title);
-  return `
-  <div class="meal-card">
-    <img src="${img}" onerror="this.src='${FALLBACK_IMG}'"/>
-    <div class="meal-body">
-      <div class="meal-header">
-        <div>
-          <div class="meal-title">${label}</div>
-          <div class="meal-name">${title}</div>
-        </div>
-        <span class="kcal">${kcal} kcal</span>
-      </div>
-      <div class="dropdowns">
-        <button class="pill dd-btn" data-dd="ingredients">Ingredients</button>
-        ${isLunch ? `<button class="pill dd-btn" data-dd="kids">Kids Lunch</button>
-        <button class="pill dd-btn" data-dd="office">Office Lunch</button>` : ``}
-      </div>
-      <div class="dropdown-panel hidden"></div>
-    </div>
-  </div>`;
+/********************
+ * UI WIRING FIX
+ ********************/
+
+function buildDays() {
+  const el = document.getElementById("weekDays");
+  if (!el) return;
+
+  el.innerHTML = "";
+  DAYS.forEach(d => {
+    const b = document.createElement("button");
+    b.className = "day-btn" + (d === activeDay ? " active" : "");
+    b.textContent = d;
+    b.onclick = () => {
+      activeDay = d;
+      setActiveDayUI();
+      render();
+    };
+    el.appendChild(b);
+  });
 }
 
-function render(){
-  const app = document.getElementById("app");
-  const day = weekPlan[activeDay];
-
-  if (activeTab === "Today") {
-    app.innerHTML = `<div class="meal-row">
-      ${card("Breakfast", day.breakfast, false)}
-      ${card("Lunch", day.lunch, true)}
-      ${card("Dinner", day.dinner, false)}
-    </div>`;
-  }
+function setActiveDayUI() {
+  document.querySelectorAll(".day-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.textContent === activeDay);
+  });
 }
 
-document.getElementById("generateWeekBtn").onclick = () => {
-  weekPlan = generateNewWeek();
+function setActiveTabUI(id) {
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  const el = document.getElementById(id);
+  if (el) el.classList.add("active");
+}
+
+document.getElementById("tabToday")?.addEventListener("click", () => {
+  activeTab = "Today";
+  setActiveTabUI("tabToday");
   render();
+});
+
+document.getElementById("tabWeek")?.addEventListener("click", () => {
+  activeTab = "Week";
+  setActiveTabUI("tabWeek");
+  render();
+});
+
+document.getElementById("tabShopping")?.addEventListener("click", () => {
+  activeTab = "Shopping";
+  setActiveTabUI("tabShopping");
+  render();
+});
+
+function wireDropdowns() {
+  document.querySelectorAll(".meal-card").forEach(cardEl => {
+    const panel = cardEl.querySelector(".dropdown-panel");
+    const buttons = cardEl.querySelectorAll(".dd-btn");
+
+    buttons.forEach(btn => {
+      btn.onclick = () => {
+        buttons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        panel.classList.remove("hidden");
+
+        const label = cardEl.querySelector(".meal-title").textContent;
+        const meal = weekPlan[activeDay][label.toLowerCase()];
+
+        if (btn.dataset.dd === "ingredients") {
+          panel.innerHTML = `<b>Ingredients</b>
+            <ul>${(meal.ingredients||[]).map(i=>`<li>${i}</li>`).join("")}</ul>`;
+        }
+
+        if (btn.dataset.dd === "kids") {
+          const kidsOptions = [
+            meal.kids,
+            ...POOL.kidsOnly.map(k => k.name)
+          ];
+          panel.innerHTML = `<b>Kids Lunch</b>
+            <ul>${kidsOptions.map(i=>`<li>${i}</li>`).join("")}</ul>`;
+        }
+
+        if (btn.dataset.dd === "office") {
+          panel.innerHTML = `<b>Office Lunch</b><div>${meal.office}</div>`;
+        }
+      };
+    });
+  });
+}
+
+// Patch render to re-wire dropdowns after render
+const _render = render;
+render = function () {
+  _render();
+  wireDropdowns();
 };
 
+// Init UI
+buildDays();
+setActiveDayUI();
+setActiveTabUI("tabToday");
 render();
