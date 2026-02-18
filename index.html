@@ -2,50 +2,44 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Okubanjo Family Meals</title>
+  <title>Okubizzy Meal Planner</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-<header class="header">
-  <div class="brand">
-    <div class="logo">
-      <span class="logo-ok">OK</span>
-      <span class="logo-text">okubizzy</span>
+  <header class="header">
+    <div class="brand">
+      <img src="logo.png" alt="Okubizzy" class="brand-logo" />
+      <div class="brand-text">
+        <div class="brand-name">Okubizzy</div>
+        <div class="brand-tagline">family meal planner</div>
+      </div>
     </div>
-    <div class="brand-name">Okubizzy Meal Planner</div>
-  </div>
 
-  <div class="header-actions">
-    <button id="generateWeekBtn" class="primary-btn">Generate New Week</button>
-
-    <div class="tabs">
-      <button class="tab active" id="tabToday">Today</button>
-      <button class="tab" id="tabWeek">Week</button>
-      <button class="tab" id="tabShopping">Shopping List</button>
+    <div class="header-actions">
+      <button id="generateWeekBtn" class="pill">Generate New Week</button>
+      <div class="tabs">
+        <button class="tab active" id="tabToday">Today</button>
+        <button class="tab" id="tabWeek">Week</button>
+        <button class="tab" id="tabShopping">Shopping List</button>
+      </div>
     </div>
+  </header>
+
+  <div class="container">
+    <div class="week-days">
+      <button class="day-btn">Mon</button>
+      <button class="day-btn">Tue</button>
+      <button class="day-btn">Wed</button>
+      <button class="day-btn">Thu</button>
+      <button class="day-btn">Fri</button>
+      <button class="day-btn">Sat</button>
+      <button class="day-btn">Sun</button>
+    </div>
+
+    <main id="app"></main>
   </div>
-</header>
-
-
-
-
- <div class="controls">
-
-  <div class="week-days">
-    <button class="day-btn">Mon</button>
-    <button class="day-btn">Tue</button>
-    <button class="day-btn">Wed</button>
-    <button class="day-btn active">Thu</button>
-    <button class="day-btn">Fri</button>
-    <button class="day-btn">Sat</button>
-    <button class="day-btn">Sun</button>
-  </div>
-</div>
-
-
-  <main class="container" id="app"></main>
 
   <script src="app.js"></script>
 </body>
