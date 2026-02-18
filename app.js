@@ -77,10 +77,15 @@ function render() {
 function card(label, item) {
   return `
     <div class="meal-card">
-      <img src="${item.img}" onerror="this.src='https://images.unsplash.com/photo-1490645935967-10de6ba17061'" />
+      <img src="${item.img}" />
       <div class="meal-body">
-        <div class="meal-title">${label}</div>
-        ${item.title}
+        <div class="meal-header">
+          <div>
+            <div class="meal-title">${label}</div>
+            <div class="meal-name">${item.title}</div>
+          </div>
+          <span class="kcal">${item.kcal || 600} kcal</span>
+        </div>
       </div>
     </div>
   `;
@@ -89,14 +94,20 @@ function card(label, item) {
 function stackedCard(label, item) {
   return `
     <div class="meal-card" style="margin-bottom:16px;">
-      <img src="${item.img}" onerror="this.src='https://images.unsplash.com/photo-1490645935967-10de6ba17061'" />
+      <img src="${item.img}" />
       <div class="meal-body">
-        <div class="meal-title">${label}</div>
-        ${item.title}
+        <div class="meal-header">
+          <div>
+            <div class="meal-title">${label}</div>
+            <div class="meal-name">${item.title}</div>
+          </div>
+          <span class="kcal">${item.kcal || 600} kcal</span>
+        </div>
       </div>
     </div>
   `;
 }
+
 
 /* Tabs */
 document.getElementById("tabToday").onclick = () => {
