@@ -63,9 +63,9 @@ function render() {
 if (activeTab === "Week") {
   app.innerHTML = `
     <div class="week-view">
-      ${stackedCard("Breakfast", dayMeals.breakfast)}
-      ${stackedCard("Lunch", dayMeals.lunch)}
-      ${stackedCard("Dinner", dayMeals.dinner)}
+    ${stackedCard("Breakfast", dayMeals.breakfast, false)}
+    ${stackedCard("Lunch", dayMeals.lunch, true)}
+    ${stackedCard("Dinner", dayMeals.dinner, false)}
     </div>
   `;
 }
