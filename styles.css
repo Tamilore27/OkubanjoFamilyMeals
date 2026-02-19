@@ -1,62 +1,35 @@
-/* =========================================================
-   OKUBIZZY FAMILY MEALS — style.css
-   Pastel, kid-friendly, readable cards + smooth animations
-   ========================================================= */
+/* style.css - Pastel theme with soft edges */
 
 :root {
-  --bg1:    rgba(255,182,193,0.55);
-  --bg2:    rgba(255,250,205,0.55);
-  --bg3:    rgba(173,216,230,0.55);
-  --bg4:    rgba(221,160,221,0.45);
-  --text:   rgba(17,24,39,0.95);
-  --muted:  rgba(17,24,39,0.60);
+  --bg1: rgba(255,182,193,0.55);
+  --bg2: rgba(255,250,205,0.55);
+  --bg3: rgba(173,216,230,0.55);
+  --bg4: rgba(221,160,221,0.45);
+  --text: rgba(17,24,39,0.95);
+  --muted: rgba(17,24,39,0.60);
   --border: rgba(17,24,39,0.10);
-  --card:   rgba(255,255,255,0.82);
-  --card2:  rgba(255,255,255,0.68);
-  --shadow:  0 18px 45px rgba(17,24,39,0.10);
-  --shadow2: 0 10px 22px rgba(17,24,39,0.10);
-}
-
-* {
-  box-sizing: border-box;
-}
-
-html, body {
-  height: 100%;
+  --card: rgba(255,255,255,0.82);
+  --shadow: 0 18px 45px rgba(17,24,39,0.10);
 }
 
 body {
   margin: 0;
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Helvetica Neue";
+  font-family: system-ui;
   color: var(--text);
-  background:
-    radial-gradient(1000px 500px at 0% 0%, var(--bg1), transparent 60%),
-    radial-gradient(1000px 500px at 100% 0%, var(--bg3), transparent 60%),
-    radial-gradient(900px 500px at 25% 100%, var(--bg4), transparent 60%),
-    radial-gradient(900px 500px at 95% 100%, var(--bg2), transparent 60%),
-    linear-gradient(180deg, #ffffff, #f6f7ff);
+  background: linear-gradient(to bottom, #ffffff, #f6f7ff);
 }
 
-/* =========================
-   TOP BAR
-   ========================= */
 .topbar {
-  position: sticky;
-  top: 0;
-  z-index: 10;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 14px 18px;
+  padding: 14px;
   background: rgba(255,255,255,0.68);
   border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(10px);
 }
 
 .brand {
   display: flex;
   gap: 12px;
-  align-items: center;
 }
 
 .logo {
@@ -64,435 +37,139 @@ body {
   height: 42px;
   border-radius: 14px;
   border: 1px solid var(--border);
-  background:
-    radial-gradient(18px 18px at 30% 30%, rgba(255,182,193,0.75), transparent 60%),
-    radial-gradient(20px 20px at 75% 35%, rgba(173,216,230,0.70), transparent 60%),
-    radial-gradient(24px 24px at 50% 80%, rgba(255,250,205,0.70), transparent 60%),
-    rgba(255,255,255,0.90);
-  box-shadow: var(--shadow2);
-}
-
-.brand .title {
-  font-weight: 900;
-  letter-spacing: -0.02em;
-  line-height: 1.05;
-}
-
-.brand .subtitle {
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 2px;
+  background: rgba(255,255,255,0.9);
 }
 
 .nav {
   display: flex;
-  gap: 12px;          /* improved spacing */
-  align-items: center;
-  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .tab {
+  padding: 8px 12px;
+  border-radius: 999px;
   border: 1px solid var(--border);
   background: rgba(255,255,255,0.76);
   color: var(--text);
-  padding: 8px 12px;
-  border-radius: 999px;
   font-weight: 800;
   font-size: 12px;
+  text-decoration: none;
   cursor: pointer;
-  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
-}
-
-.tab:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--shadow2);
-}
-
-.tab:focus {
-  outline: 2px solid #6b7280;
-  outline-offset: 2px;
 }
 
 .tab.active {
-  background: linear-gradient(90deg,
-    rgba(255,182,193,0.70),
-    rgba(255,250,205,0.65),
-    rgba(173,216,230,0.65),
-    rgba(221,160,221,0.60)
-  );
+  background: linear-gradient(90deg, rgba(255,182,193,0.70), rgba(255,250,205,0.65));
 }
 
-/* =========================
-   LAYOUT & TYPOGRAPHY
-   ========================= */
 .container {
   max-width: 1120px;
   margin: 0 auto;
-  padding: 34px 18px 40px;
-}
-
-.hidden {
-  display: none !important;
-}
-
-h1 {
-  font-size: 28px;
-  margin: 0;
-  letter-spacing: -0.03em;
-}
-
-.pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 14px;     /* slightly larger for readability */
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,0.70);
-  color: var(--muted);
-  font-size: 13px;
-  font-weight: 800;
-}
-
-/* =========================
-   PAGE HEADERS
-   ========================= */
-.page {
-  padding: 24px 0;
-  min-height: calc(100vh - 140px);
+  padding: 34px 18px;
 }
 
 .page-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-  gap: 12px;
 }
 
-.page-header h1 {
-  margin: 0;
-  font-size: 2rem;
-}
-
-/* =========================
-   DAY TABS (Week view)
-   ========================= */
-.dayTabs {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin: 10px 0 16px;
-}
-
-.dayTab {
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,0.75);
-  color: rgba(17,24,39,0.92);
-  padding: 8px 10px;
+.pill {
+  padding: 8px 14px;
   border-radius: 999px;
-  font-weight: 900;
-  font-size: 12px;
-  cursor: pointer;
-  transition: transform .12s ease, box-shadow .12s ease;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.70);
+  font-size: 13px;
 }
 
-.dayTab:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--shadow2);
-}
-
-.dayTab:focus {
-  outline: 2px solid #6b7280;
-  outline-offset: 2px;
-}
-
-.dayTab.active {
-  background: linear-gradient(90deg,
-    rgba(221,160,221,0.55),
-    rgba(173,216,230,0.60),
-    rgba(255,250,205,0.60)
-  );
-}
-
-/* =========================
-   CARD GRID & CARDS
-   ========================= */
-.grid {
+.grid, .cards {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
-  align-items: start;
 }
 
 @media (max-width: 980px) {
-  .grid {
+  .grid, .cards {
     grid-template-columns: 1fr;
   }
 }
 
 .card {
-  background: linear-gradient(180deg, var(--card), var(--card2));
+  background: var(--card);
   border: 1px solid var(--border);
   border-radius: 20px;
   box-shadow: var(--shadow);
   overflow: hidden;
-  cursor: pointer;
-  transition: transform .14s ease, box-shadow .14s ease;
-}
-
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 22px 55px rgba(17,24,39,0.13);
 }
 
 .imgWrap {
-  position: relative;
   height: 180px;
-  overflow: hidden;
-  border-bottom: 1px solid rgba(0,0,0,0.08);
-  background: rgba(255,255,255,0.7);
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .mealImg {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
   border-radius: 16px;
-  transition: transform 0.3s ease;
-}
-
-.card:hover .mealImg {
-  transform: scale(1.08);
 }
 
 .cardTop {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 12px 14px 8px;
-}
-
-.mealType {
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: rgba(17,24,39,0.55);
-}
-
-.mealName {
-  font-size: 16px;
-  font-weight: 950;
-  letter-spacing: -0.02em;
-  margin-top: 3px;
-  color: rgba(17,24,39,0.95);
+  padding: 12px;
 }
 
 .kcal {
-  font-size: 12px;
-  font-weight: 900;
   padding: 6px 10px;
   border-radius: 999px;
   background: rgba(255,250,205,0.75);
-  border: 1px solid rgba(255,206,86,0.35);
-  color: rgba(17,24,39,0.90);
-  white-space: nowrap;
+  font-weight: 900;
+  font-size: 12px;
 }
 
-/* Kids Lunch button & dropdown */
-.kids-btn {
-  font-size: 11px;
-  padding: 5px 10px;
-  background: #a7d8e8;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  margin-left: auto;
-  font-weight: 700;
-}
-
-.kids-btn:hover,
-.kids-btn:focus {
-  background: #8cc9dd;
-  outline: 2px solid #4a90e2;
-}
-
-.kids-dropdown {
-  margin: 8px 14px;
-  padding: 8px;
-  background: #f8f9fa;
-  border-radius: 12px;
-  border: 1px solid #e0e0e0;
-}
-
-.kids-select {
-  width: 100%;
-  padding: 8px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 13px;
-}
-
-/* Expandable details */
-.details {
-  margin: 0 14px 14px;
+.dropdown {
   padding: 12px;
-  border: 1px solid rgba(17,24,39,0.10);
-  border-radius: 16px;
-  background: rgba(255,255,255,0.88);
-  box-shadow: 0 10px 22px rgba(17,24,39,0.08);
-  color: rgba(17,24,39,0.92);
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  transform: translateY(-6px);
-  transition: max-height .32s ease, opacity .25s ease, transform .25s ease;
 }
 
-.card.expanded .details {
-  max-height: 520px;
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.details h3 {
-  margin: 0 0 8px;
-  font-size: 13px;
-  font-weight: 950;
-  color: rgba(17,24,39,0.95);
-}
-
-.details ul, .details ol {
-  margin: 0 0 10px;
-  padding-left: 18px;
-  color: rgba(17,24,39,0.92);
-}
-
-.details li {
-  margin: 4px 0;
-  line-height: 1.35;
-}
-
-/* Month view */
 .month-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px;
 }
 
 .month-week {
-  border: 1px solid rgba(17,24,39,0.12);
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 12px;
-  background: rgba(255,255,255,0.7);
-}
-
-.month-week-title {
-  font-weight: 900;
-  text-align: center;
-  margin-bottom: 10px;
-  color: rgba(17,24,39,0.9);
 }
 
 .month-tile {
   padding: 10px;
-  margin: 4px 0;
-  background: rgba(255,255,255,0.85);
   border-radius: 10px;
+  background: rgba(255,255,255,0.85);
   cursor: pointer;
-  transition: all 0.15s;
 }
 
-.month-tile:hover {
-  background: rgba(255,182,193,0.4);
-  transform: scale(1.02);
-  color: #1f2937;
-}
-
-.tile-day {
-  font-weight: 800;
-  font-size: 13px;
-}
-
-.tile-meal {
-  font-size: 12px;
-  color: rgba(17,24,39,0.75);
-  margin-top: 4px;
-}
-
-/* Calorie totals */
-.cal-total, .cal-totals {
-  margin: 12px 0;
-  padding: 10px 14px;
-  background: rgba(255,250,205,0.6);
-  border-radius: 12px;
-  font-weight: 800;
-  text-align: center;
-}
-
-/* Shopping table */
-.shop-table-wrap {
-  overflow-x: auto;
-}
-
-#shopTable {
+.shop-table-wrap table {
   width: 100%;
   border-collapse: collapse;
-  background: rgba(255,255,255,0.85);
-  border-radius: 12px;
-  overflow: hidden;
 }
 
-#shopTable th, #shopTable td {
-  padding: 12px 14px;
-  border-bottom: 1px solid rgba(17,24,39,0.08);
-  text-align: left;
-}
-
-#shopTable th {
-  background: rgba(255,182,193,0.4);
-  font-weight: 900;
+.shop-table-wrap th, td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
 }
 
 .shop-notice {
-  margin: 16px 0;
   padding: 12px;
-  background: rgba(173,216,230,0.3);
   border-radius: 12px;
-  font-size: 14px;
+  background: rgba(173,216,230,0.3);
 }
 
-/* Page transitions */
-.view:not(.hidden) {
-  animation: fadeIn 0.4s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* Footer */
 .footer {
   text-align: center;
-  margin-top: 26px;
-  padding: 18px 10px;
+  padding: 18px;
   border-top: 1px solid var(--border);
-  color: rgba(17,24,39,0.55);
-  background: rgba(255,255,255,0.35);
-}
-
-/* Print mode */
-@media print {
-  .topbar, .actions, .dayTabs, .footer { display: none !important; }
-  body { background: #fff; }
-  .card { box-shadow: none; }
-  .details { max-height: none !important; opacity: 1 !important; transform: none !important; }
+  color: var(--muted);
 }
