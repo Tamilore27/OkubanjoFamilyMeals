@@ -1,93 +1,108 @@
-const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-const todayIdx = (new Date().getDay() + 6) % 7;
-let activeDay = DAYS[todayIdx];
-let activeTab = "Today";
+let currentWeek = 0;
+let currentView = "week";
 
-const FALLBACK_IMG = "https://images.unsplash.com/photo-1490645935967-10de6ba17061";
+const weeks = ["Week 1", "Week 2", "Week 3", "Week 4"];
 
-const WEEK = {
-  Mon: {
-    breakfast: { name: "Cereal / Sandwich", img: FALLBACK_IMG, ingredients: ["milk","bread"] },
-    lunch: { main: "Jollof Rice & Chicken", kids: "Jollof Rice & Chicken", office: "Leftovers", ingredients: ["rice","chicken"] },
-    dinner: { name: "Salmon & Veg", img: FALLBACK_IMG, ingredients: ["fish","veggies"] }
+/* ================================
+   🔽 IMAGE PLACEHOLDER SECTION
+   Replace URLs below with your own images later
+   ================================ */
+// const mealImages = {
+//   breakfast: "img/breakfast.jpg",
+//   lunch: "img/lunch.jpg",
+//   dinner: "img/dinner.jpg"
+// };
+/* ================================ */
+
+const data = {
+  Week1: {
+    breakfast: "Sandwich / Cereal / Pancakes & Eggs",
+    lunch: "Jollof rice & chicken (650 cal)",
+    dinner: "Salmon & stir-fry veggies (550 cal)",
+    kids: "Pancakes, eggs & sausages",
+    calories: 1200
   },
-  Tue: {
-    breakfast: { name: "Cereal / Sandwich", img: FALLBACK_IMG, ingredients: ["milk","bread"] },
-    lunch: { main: "Fried Rice & Chicken", kids: "Fried Rice & Chicken", office: "Leftovers", ingredients: ["rice","chicken"] },
-    dinner: { name: "Burger & Salad", img: FALLBACK_IMG, ingredients: ["beef","salad"] }
+  Week2: {
+    breakfast: "Sandwich / Cereal / Pancakes & Eggs",
+    lunch: "Fried rice & shrimp (700 cal)",
+    dinner: "Pasta & chicken (680 cal)",
+    kids: "Kids fried rice",
+    calories: 1380
   },
-  Wed: {
-    breakfast: { name: "Cereal / Sandwich", img: FALLBACK_IMG, ingredients: ["milk","bread"] },
-    lunch: { main: "Pasta Bolognese", kids: "Pasta", office: "Leftovers", ingredients: ["pasta","beef"] },
-    dinner: { name: "Grilled Fish & Potatoes", img: FALLBACK_IMG, ingredients: ["fish","potato"] }
+  Week3: {
+    breakfast: "Sandwich / Cereal / Pancakes & Eggs",
+    lunch: "White rice & chicken stew (640 cal)",
+    dinner: "Grilled fish & veggies (520 cal)",
+    kids: "Jollof pasta",
+    calories: 1160
   },
-  Thu: {
-    breakfast: { name: "Cereal / Sandwich", img: FALLBACK_IMG, ingredients: ["milk","bread"] },
-    lunch: { main: "Jollof Rice & Fish", kids: "Jollof Rice & Fish", office: "Leftovers", ingredients: ["rice","fish"] },
-    dinner: { name: "Chicken Stir-fry", img: FALLBACK_IMG, ingredients: ["chicken","veggies"] }
-  },
-  Fri: {
-    breakfast: { name: "Cereal / Sandwich", img: FALLBACK_IMG, ingredients: ["milk","bread"] },
-    lunch: { main: "Fried Rice", kids: "Fried Rice", office: "Leftovers", ingredients: ["rice"] },
-    dinner: { name: "Pizza", img: FALLBACK_IMG, ingredients: ["bread"] }
-  },
-  Sat: {
-    breakfast: { name: "Yam & Egg", img: FALLBACK_IMG, ingredients: ["egg","yam"] },
-    lunch: { main: "Jollof Rice", kids: "Jollof Rice", office: "Leftovers", ingredients: ["rice"] },
-    dinner: { name: "Eba & Okra", img: FALLBACK_IMG, ingredients: ["veggies"] }
-  },
-  Sun: {
-    breakfast: { name: "Akara", img: FALLBACK_IMG, ingredients: ["beans"] },
-    lunch: { main: "Pasta", kids: "Pasta", office: "Leftovers", ingredients: ["pasta"] },
-    dinner: { name: "Grilled Fish & Potatoes", img: FALLBACK_IMG, ingredients: ["fish","potato"] }
+  Week4: {
+    breakfast: "Sandwich / Cereal / Pancakes & Eggs",
+    lunch: "White rice & beans (620 cal)",
+    dinner: "Rice & beef stir-fry (750 cal)",
+    kids: "White rice & butter chicken",
+    calories: 1370
   }
 };
 
-function buildDays() {
-  const el = document.getElementById("weekDays");
-  el.innerHTML = "";
-  DAYS.forEach(d => {
-    const b = document.createElement("button");
-    b.className = "day-btn" + (d === activeDay ? " active" : "");
-    b.textContent = d;
-    b.onclick = () => { activeDay = d; buildDays(); render(); };
-    el.appendChild(b);
-  });
-}
-
-function card(label, meal, isLunch) {
-  return `
-  <div class="meal-card">
-    <img src="${meal.img}" />
-    <div class="meal-body">
-      <div class="meal-header">
-        <div>
-          <b>${label}</b>
-          <div>${isLunch ? meal.main : meal.name}</div>
-        </div>
-        <span class="kcal">600 kcal</span>
-      </div>
-      <div class="dropdowns">
-        <button class="pill dd-btn">Ingredients</button>
-      </div>
-    </div>
-  </div>`;
-}
-
 function render() {
-  const day = WEEK[activeDay];
-  document.getElementById("app").innerHTML = `
-    <div class="meal-row">
-      ${card("Breakfast", day.breakfast, false)}
-      ${card("Lunch", day.lunch, true)}
-      ${card("Dinner", day.dinner, false)}
-    </div>`;
+  const weekKey = `Week${currentWeek + 1}`;
+  const w = data[weekKey];
+
+  document.getElementById("viewTitle").innerText = weeks[currentWeek];
+
+  document.querySelector("#breakfast .meal-content").innerText = w.breakfast;
+  document.querySelector("#lunch .meal-content").innerText = w.lunch;
+  document.querySelector("#dinner .meal-content").innerText = w.dinner;
+  document.getElementById("kidsMenu").innerText = w.kids;
+
+  document.getElementById("calorieTotal").innerText =
+    `Approx total today: ${w.calories} calories`;
 }
 
-document.getElementById("tabToday").onclick = () => { activeTab = "Today"; render(); };
-document.getElementById("tabWeek").onclick = () => { activeTab = "Week"; render(); };
-document.getElementById("tabShopping").onclick = () => { activeTab = "Shopping"; render(); };
-document.getElementById("generateWeekBtn").onclick = () => alert("Next step: generator!");
+document.getElementById("randomizeBtn").onclick = () => {
+  currentWeek = (currentWeek + 1) % 4;
+  render();
+};
 
-buildDays();
+document.getElementById("monthBtn").onclick = () => {
+  const tiles = document.getElementById("monthTiles");
+  tiles.innerHTML = "";
+  weeks.forEach((w, i) => {
+    const div = document.createElement("div");
+    div.innerText = w;
+    div.onclick = () => {
+      currentWeek = i;
+      render();
+    };
+    tiles.appendChild(div);
+  });
+  tiles.classList.toggle("hidden");
+};
+
+document.getElementById("weekBtn").onclick = () => render();
+
+document.getElementById("todayBtn").onclick = () => {
+  const today = new Date().getDay(); // 0-6
+  document.getElementById("viewTitle").innerText += ` (Today: ${["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][today]})`;
+};
+
+document.getElementById("kidsMenuBtn").onclick = () => {
+  document.getElementById("kidsMenu").classList.toggle("hidden");
+};
+
+document.getElementById("shoppingBtn").onclick = () => {
+  document.getElementById("shoppingList").classList.toggle("hidden");
+  const list = document.getElementById("shoppingItems");
+  list.innerHTML = `
+    <li>Eggs (Superstore/Walmart)</li>
+    <li>Milk (Superstore/Walmart)</li>
+    <li>Bread (Superstore/Walmart)</li>
+    <li>Chicken breast</li>
+    <li>Salmon</li>
+    <li>Rice</li>
+    <li>Veggies</li>
+  `;
+};
+
 render();
