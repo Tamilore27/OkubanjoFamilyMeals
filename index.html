@@ -1,64 +1,103 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Family Meals</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Family Meal Planner</title>
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header class="header">
-    <h1>Family Meals</h1>
 
-    <div class="nav-buttons">
-      <button id="randomizeBtn">Randomize</button>
-      <button id="todayBtn">Today</button>
-      <button id="weekBtn">Week</button>
-      <button id="monthBtn">Month</button>
-      <button id="shoppingBtn">Shopping List</button>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">🍲</div>
+      <div>
+        <div class="title">Family Meal Planner</div>
+        <div class="subtitle" id="subtitle">Ottawa • Family of 4</div>
+      </div>
     </div>
 
-    <div id="monthTiles" class="month-tiles hidden"></div>
+    <nav class="nav">
+      <button class="tab" id="randBtn">🎲 Random Week</button>
+      <button class="tab active" id="tab-today">Today</button>
+      <button class="tab" id="tab-week">Week</button>
+      <button class="tab" id="tab-month">Month</button>
+      <button class="tab" id="tab-shop">Shopping</button>
+    </nav>
   </header>
 
-  <main>
-    <h2 id="viewTitle"></h2>
+  <main class="container">
 
-    <section class="meal-section" id="breakfast">
-      <h3>Breakfast</h3>
-      <button class="ingredientsBtn">Ingredients</button>
-      <div class="meal-content"></div>
+    <!-- TODAY -->
+    <section id="view-today" class="view">
+      <div class="viewHeader">
+        <div>
+          <h1 id="todayTitle">Today</h1>
+        </div>
+        <div class="pill" id="todayPill"></div>
+      </div>
+      <div id="todayCalTotal" class="cal-total"></div>
+      <div id="todayCards" class="grid"></div>
+      <p class="hint">Tap a card to see ingredients / kids options</p>
     </section>
 
-    <section class="meal-section" id="lunch">
-      <h3>Lunch</h3>
-      <button class="ingredientsBtn">Ingredients</button>
-      <button id="kidsMenuBtn">Kids Menu</button>
-      <div class="meal-content"></div>
-      <div id="kidsMenu" class="hidden"></div>
+    <!-- WEEK -->
+    <section id="view-week" class="view hidden">
+      <div class="viewHeader">
+        <div>
+          <h1>Week Plan</h1>
+        </div>
+        <div class="pill">Week <span id="weekNumber">1</span></div>
+      </div>
+      <div id="weekCalTotals" class="cal-totals"></div>
+      <div class="dayTabs" id="dayTabs"></div>
+      <div class="cards" id="weekCards"></div>
+      <p class="hint">Select day above • click cards for details</p>
     </section>
 
-    <section class="meal-section" id="dinner">
-      <h3>Dinner</h3>
-      <button class="ingredientsBtn">Ingredients</button>
-      <div class="meal-content"></div>
+    <!-- MONTH -->
+    <section id="view-month" class="view hidden">
+      <div class="viewHeader">
+        <h1>Monthly Overview</h1>
+      </div>
+      <div class="month-grid" id="monthGrid"></div>
+      <p class="hint">Click a day to jump to that week</p>
     </section>
 
-    <section class="meal-section hidden" id="shoppingList">
-      <h3>Shopping List (Monthly)</h3>
-      <ul id="shoppingItems"></ul>
+    <!-- SHOPPING -->
+    <section id="view-shop" class="view hidden">
+      <div class="viewHeader">
+        <h1>Shopping List — Week <span id="shopWeekNum">1</span></h1>
+      </div>
+
+      <div class="shop-notice">
+        <strong>Meal Prep Mode:</strong> Consider pre-cooking rice, proteins, and chopping veggies on Sunday.
+      </div>
+
+      <div class="shop-table-wrap">
+        <table id="shopTable">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Qty</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody id="shopBody"></tbody>
+        </table>
+      </div>
+
+      <p class="hint">Always include: eggs, milk, bread. Prices are approximate — edit in data.js later.</p>
     </section>
 
-    <section class="meal-section hidden" id="mealPrep">
-      <h3>Meal Prep Mode</h3>
-      <p>Prep proteins, chop veggies, portion rice/pasta for the week.</p>
-    </section>
-
-    <section class="meal-section" id="calories">
-      <h3>Daily Calories</h3>
-      <div id="calorieTotal"></div>
-    </section>
   </main>
 
+  <footer class="footer">
+    Local family planner • Data saved in browser
+  </footer>
+
+  <script src="data.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
