@@ -1,84 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>okubizzy Family - Today</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<header class="topbar">
-  <div class="brand">
-    <div class="logo">🍲</div>
-    <div>
-      <div class="title">okubizzy Family Meals</div>
-      <div class="subtitle">okubizzy family</div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">🍲</div>
+      <div>
+        <div class="title">okubizzy Family Meals</div>
+        <div class="subtitle">okubizzy family</div>
+      </div>
     </div>
-  </div>
-  <nav class="nav">
-    <button type="button" class="tab" id="nextWeekBtn">🎲 Next Week</button>
-    <a href="index.html" class="tab active">Today</a>
-    <a href="week.html" class="tab">Week</a>
-    <a href="month.html" class="tab">Month</a>
-    <a href="shopping.html" class="tab">Shopping</a>
-  </nav>
-</header>
+    <nav class="nav">
+      <button type="button" id="nextWeekBtn" class="tab">🎲 Next Week</button>
+      <a href="index.html" class="tab active">Today</a>
+      <a href="week.html" class="tab">Week</a>
+      <a href="month.html" class="tab">Month</a>
+      <a href="shopping.html" class="tab">Shopping</a>
+    </nav>
+  </header>
 
-<main class="container">
-  <div class="page-header">
-    <h1>Today’s Meals</h1>
-    <div class="pill" id="todayPill"></div>
-  </div>
+  <main class="container">
+    <div class="page-header">
+      <h1>Today’s Meals</h1>
+      <div class="pill" id="todayPill"></div>
+    </div>
+    <div id="todayCalTotal" class="cal-total"></div>
+    <div id="todayCards" class="grid"></div>
+    <p class="hint">Tap a card to expand</p>
+  </main>
 
-  <div id="todayCalTotal" class="cal-total"></div>
-  <div id="todayCards" class="grid"></div>
+  <footer class="footer">
+    okubizzy meal planner
+  </footer>
 
-  <p class="hint">Tap a card to see more details</p>
-</main>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    const weekIndex = getCurrentWeekIndex();
+    const week = MONTH_PLAN[weekIndex];
+    const todayIdx = getTodayIndex();
+    const day = week.days[todayIdx];
 
-<footer class="footer">
-  okubizzy family meal planner • saved on this computer
-</footer>
+    $('todayPill').textContent = day.day + ' • ' + new Date().toLocaleDateString('en-CA', {weekday:'long', month:'short', day:'numeric'});
 
-<script src="data.js"></script>
-<script src="app.js"></script>
-<script>
-// ── TODAY PAGE ONLY ──────────────────────────────────────
-const weekIndex = getCurrentWeekIndex();
-const week = MONTH_PLAN[weekIndex];
-const todayNumber = new Date().getDay();
-const todayIndex = todayNumber === 0 ? 6 : todayNumber - 1;
-const today = week.days[todayIndex];
+    const cards = $('todayCards');
+    let total = 0;
 
-document.getElementById("todayPill").textContent =
-  today.day + " • " + new Date().toLocaleDateString("en-CA", {
-    weekday: "long",
-    month: "short",
-    day: "numeric"
-  });
+    cards.appendChild(renderMealCard('Breakfast', day.breakfast));
+    total += MEAL_KCAL[day.breakfast] || 550;
 
-const container = document.getElementById("todayCards");
-let totalKcal = 0;
+    cards.appendChild(renderMealCard('Lunch', day.lunch, day.kidsLunch));
+    total += MEAL_KCAL[day.lunch] || 550;
 
-container.appendChild(renderMealCard("Breakfast", today.breakfast));
-totalKcal += MEAL_KCAL[today.breakfast] || 550;
+    cards.appendChild(renderMealCard('Dinner', day.dinner));
+    total += MEAL_KCAL[day.dinner] || 550;
 
-container.appendChild(renderMealCard("Lunch", today.lunch, true, today.kidsLunch));
-totalKcal += MEAL_KCAL[today.lunch] || 550;
+    $('todayCalTotal').textContent = 'Daily calories: ~' + total + ' kcal';
 
-container.appendChild(renderMealCard("Dinner", today.dinner));
-totalKcal += MEAL_KCAL[today.dinner] || 550;
-
-document.getElementById("todayCalTotal").textContent =
-  "Estimated daily total: ≈ " + totalKcal + " kcal";
-
-// Next week button
-document.getElementById("nextWeekBtn").onclick = () => {
-  setCurrentWeekIndex(weekIndex + 1);
-  window.location.reload();
-};
-</script>
-
+    $('nextWeekBtn').onclick = () => {
+      setCurrentWeekIndex(weekIndex + 1);
+      location.reload();
+    };
+  </script>
 </body>
 </html>
