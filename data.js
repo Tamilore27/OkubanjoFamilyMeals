@@ -61,7 +61,45 @@ const MONTH_PLAN = [
     { day: "Sun", breakfast: "Bread & egg",      lunch: "Light veggie bowl",        dinner: "Eba & Egusi",               kidsLunch: "" }
   ]},
   // Week 2, 3, 4 remain the same as previous version...
-  // (omitted here for brevity — copy from your previous data.js)
+ // Week 2
+  {
+    week: 2,
+    days: [
+      { day: "Mon", breakfast: "Sandwich",         lunch: "Fried rice & chicken",     dinner: "Salmon & stir-fry veggies", kidsLunch: "Kids fried rice" },
+      { day: "Tue", breakfast: "Cereal",           lunch: "Shrimp salad",             dinner: "Chicken pepper soup",       kidsLunch: "Pancakes, eggs & sausages" },
+      { day: "Wed", breakfast: "Sandwich",         lunch: "Rice & chicken stir-fry",  dinner: "Grilled fish & veggies",    kidsLunch: "Jollof pasta" },
+      { day: "Thu", breakfast: "Cereal",           lunch: "Fried rice & shrimp",      dinner: "Pasta & chicken",           kidsLunch: "Jollof rice" },
+      { day: "Fri", breakfast: "Sandwich",         lunch: "Healthy veggie wrap",      dinner: "Pasta (special)",           kidsLunch: "Bread, butter & jam / sandwiches" },
+      { day: "Sat", breakfast: "Yam & egg",        lunch: "Meat pie / sausage roll",  dinner: "Leftover pasta",            kidsLunch: "" },
+      { day: "Sun", breakfast: "Pancakes & eggs",  lunch: "Light salad & grilled fish", dinner: "Beef pepper soup",       kidsLunch: "" }
+    ]
+  },
+  // Week 3
+  {
+    week: 3,
+    days: [
+      { day: "Mon", breakfast: "Sandwich",         lunch: "White rice & chicken stew", dinner: "Salmon & stir-fry veggies", kidsLunch: "White rice & stew" },
+      { day: "Tue", breakfast: "Cereal",           lunch: "Beef salad",               dinner: "Chicken pepper soup",       kidsLunch: "Pancakes, eggs & sausages" },
+      { day: "Wed", breakfast: "Sandwich",         lunch: "Rice & chicken stir-fry",  dinner: "Grilled fish & veggies",    kidsLunch: "Jollof pasta" },
+      { day: "Thu", breakfast: "Cereal",           lunch: "White rice & grilled fish", dinner: "Pasta & shrimp",           kidsLunch: "Kids fried rice" },
+      { day: "Fri", breakfast: "Sandwich",         lunch: "Healthy tuna wrap",        dinner: "Grilled chicken + veggies & potatoes", kidsLunch: "White rice & butter chicken" },
+      { day: "Sat", breakfast: "Pancakes & eggs",  lunch: "Puff puff / samosa",       dinner: "Leftover pasta & shrimp",   kidsLunch: "" },
+      { day: "Sun", breakfast: "Bread & egg",      lunch: "Light veggie bowl",        dinner: "Eba & Okra",                kidsLunch: "" }
+    ]
+  },
+  // Week 4
+  {
+    week: 4,
+    days: [
+      { day: "Mon", breakfast: "Sandwich",         lunch: "White rice & beans",       dinner: "Salmon & stir-fry veggies", kidsLunch: "White rice & stew" },
+      { day: "Tue", breakfast: "Cereal",           lunch: "Chicken salad",            dinner: "Beef pepper soup",          kidsLunch: "Pancakes, eggs & sausages" },
+      { day: "Wed", breakfast: "Sandwich",         lunch: "Rice & chicken stir-fry",  dinner: "Grilled fish & veggies",    kidsLunch: "Jollof pasta" },
+      { day: "Thu", breakfast: "Cereal",           lunch: "White rice & beans + plantain", dinner: "Pasta & chicken",     kidsLunch: "Kids fried rice" },
+      { day: "Fri", breakfast: "Sandwich",         lunch: "Healthy veggie wrap",      dinner: "Rice & beef stir-fry",      kidsLunch: "Jollof rice" },
+      { day: "Sat", breakfast: "Yam & egg",        lunch: "Meat pie / sausage roll",  dinner: "Leftover pasta & chicken",  kidsLunch: "" },
+      { day: "Sun", breakfast: "Pancakes & eggs",  lunch: "Light salad & grilled chicken", dinner: "Chicken pepper soup", kidsLunch: "" }
+    ]
+  }
 ];
 
 // Placeholder images (centered + rounded in CSS)
