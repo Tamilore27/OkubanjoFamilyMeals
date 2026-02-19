@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>okubizzy Family - Week</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">🍲</div>
+    <div>
+      <div class="title">okubizzy Family Meals</div>
+      <div class="subtitle">okubizzy family</div>
+    </div>
+  </div>
+  <nav class="nav">
+    <button type="button" class="tab" id="nextWeekBtn">🎲 Next Week</button>
+    <a href="index.html" class="tab">Today</a>
+    <a href="week.html" class="tab active">Week</a>
+    <a href="month.html" class="tab">Month</a>
+    <a href="shopping.html" class="tab">Shopping</a>
+  </nav>
+</header>
+
+<main class="container">
+  <div class="page-header">
+    <h1>This Week’s Plan</h1>
+    <div class="pill">Week <span id="weekNumber"></span></div>
+  </div>
+
+  <div id="weekCalTotals" class="cal-totals"></div>
+  <div class="dayTabs" id="dayTabs"></div>
+  <div class="cards" id="weekCards"></div>
+
+  <p class="hint">Click a day above • tap cards for details</p>
+</main>
+
+<footer class="footer">
+  okubizzy family meal planner • saved on this computer
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+// ── WEEK PAGE ONLY ───────────────────────────────────────
+const weekIndex = getCurrentWeekIndex();
+const week = MONTH_PLAN[weekIndex];
+document.getElementById("weekNumber").textContent = week.week;
+
+const tabs = document.getElementById("dayTabs");
+let currentDay = 0;
+
+week.days.forEach((day, i) => {
+  const btn = document.createElement("button");
+  btn.className = "dayTab" + (i === currentDay ? " active" : "");
+  btn.textContent = day.day.substring(0,3);
+  btn.onclick = () => {
+    currentDay = i;
+    [...tabs.children].forEach((b, idx) => b.classList.toggle("active", idx === currentDay));
+    showDay(i);
+  };
+  tabs.appendChild(btn);
+});
+
+function showDay(idx) {
+  const day = week.days[idx];
+  const container = document.getElementById("weekCards");
+  container.innerHTML = "";
+  let total = 0;
+
+  container.appendChild(renderMealCard("Breakfast", day.breakfast));
+  total += MEAL_KCAL[day.breakfast] || 550;
+
+  container.appendChild(renderMealCard("Lunch", day.lunch, true, day.kidsLunch));
+  total += MEAL_KCAL[day.lunch] || 550;
+
+  container.appendChild(renderMealCard("Dinner", day.dinner));
+  total += MEAL_KCAL[day.dinner] || 550;
+
+  document.getElementById("weekCalTotals").textContent =
+    day.day + " estimated total: ≈ " + total + " kcal";
+}
+
+showDay(currentDay);
+
+document.getElementById("nextWeekBtn").onclick = () => {
+  setCurrentWeekIndex(weekIndex + 1);
+  window.location.reload();
+};
+</script>
+
+</body>
+</html>
