@@ -1,98 +1,88 @@
-/* Month view */
-.month-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
-}
-
-.month-week {
-  border: 1px solid rgba(17,24,39,0.12);
-  border-radius: 12px;
-  padding: 12px;
+/* Images - centered and soft round edges */
+.imgWrap {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
   background: rgba(255,255,255,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.month-week-title {
-  font-weight: 900;
-  text-align: center;
-  margin-bottom: 10px;
-  color: rgba(17,24,39,0.9);
-}
-
-.month-tile {
-  padding: 10px;
-  margin: 4px 0;
-  background: rgba(255,255,255,0.85);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.month-tile:hover {
-  background: rgba(255,182,193,0.4);
-  transform: scale(1.02);
-}
-
-.tile-day {
-  font-weight: 800;
-  font-size: 13px;
-}
-
-.tile-meal {
-  font-size: 12px;
-  color: rgba(17,24,39,0.75);
-  margin-top: 4px;
-}
-
-/* Calorie totals */
-.cal-total, .cal-totals {
-  margin: 12px 0;
-  padding: 10px 14px;
-  background: rgba(255,250,205,0.6);
-  border-radius: 12px;
-  font-weight: 800;
-  text-align: center;
-}
-
-/* Kids button */
-.kids-btn {
-  font-size: 11px;
-  padding: 4px 8px;
-  background: rgba(173,216,230,0.7);
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  margin-left: auto;
-}
-
-/* Shopping table */
-.shop-table-wrap {
-  overflow-x: auto;
-}
-
-#shopTable {
+.mealImg {
   width: 100%;
-  border-collapse: collapse;
-  background: rgba(255,255,255,0.85);
-  border-radius: 12px;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 16px;
+  transition: transform 0.3s ease;
+}
+
+.card:hover .mealImg {
+  transform: scale(1.08);
+}
+
+/* Softer card edges */
+.card {
+  border-radius: 20px;
   overflow: hidden;
 }
 
-#shopTable th, #shopTable td {
-  padding: 12px 14px;
-  border-bottom: 1px solid rgba(17,24,39,0.08);
-  text-align: left;
+/* Page separation */
+.page {
+  padding: 24px 0;
+  min-height: calc(100vh - 140px);
 }
 
-#shopTable th {
-  background: rgba(255,182,193,0.4);
-  font-weight: 900;
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
-.shop-notice {
-  margin: 16px 0;
-  padding: 12px;
-  background: rgba(173,216,230,0.3);
+.page-header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+/* Kids dropdown */
+.kids-btn {
+  font-size: 11px;
+  padding: 5px 10px;
+  background: #a7d8e8;
+  border: none;
   border-radius: 12px;
-  font-size: 14px;
+  cursor: pointer;
+  margin-left: auto;
+  font-weight: 700;
+}
+
+.kids-dropdown {
+  margin: 8px 14px;
+  padding: 8px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+}
+
+.kids-select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 13px;
+}
+
+/* Better spacing between views */
+.view:not(.hidden) {
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
