@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Family Meal Planner</title>
+  <title>okubizzy Family Meal Planner</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -13,13 +13,13 @@
     <div class="brand">
       <div class="logo">🍲</div>
       <div>
-        <div class="title">Family Meal Planner</div>
-        <div class="subtitle" id="subtitle">Ottawa • Family of 4</div>
+        <div class="title">okubizzy Family Meals</div>
+        <div class="subtitle">okubizzy family</div>
       </div>
     </div>
 
     <nav class="nav">
-      <button class="tab" id="randBtn">🎲 Random Week</button>
+      <button class="tab" id="randBtn">🎲 Next Week</button>
       <button class="tab active" id="tab-today">Today</button>
       <button class="tab" id="tab-week">Week</button>
       <button class="tab" id="tab-month">Month</button>
@@ -29,50 +29,46 @@
 
   <main class="container">
 
-    <!-- TODAY -->
-    <section id="view-today" class="view">
-      <div class="viewHeader">
-        <div>
-          <h1 id="todayTitle">Today</h1>
-        </div>
+    <!-- TODAY PAGE -->
+    <section id="view-today" class="view page">
+      <div class="page-header">
+        <h1>Today’s Meals</h1>
         <div class="pill" id="todayPill"></div>
       </div>
       <div id="todayCalTotal" class="cal-total"></div>
       <div id="todayCards" class="grid"></div>
-      <p class="hint">Tap a card to see ingredients / kids options</p>
+      <p class="hint">Tap a card to expand details</p>
     </section>
 
-    <!-- WEEK -->
-    <section id="view-week" class="view hidden">
-      <div class="viewHeader">
-        <div>
-          <h1>Week Plan</h1>
-        </div>
+    <!-- WEEK PAGE -->
+    <section id="view-week" class="view page hidden">
+      <div class="page-header">
+        <h1>This Week’s Plan</h1>
         <div class="pill">Week <span id="weekNumber">1</span></div>
       </div>
       <div id="weekCalTotals" class="cal-totals"></div>
       <div class="dayTabs" id="dayTabs"></div>
       <div class="cards" id="weekCards"></div>
-      <p class="hint">Select day above • click cards for details</p>
+      <p class="hint">Select a day above • click cards for ingredients & kids options</p>
     </section>
 
-    <!-- MONTH -->
-    <section id="view-month" class="view hidden">
-      <div class="viewHeader">
+    <!-- MONTH PAGE -->
+    <section id="view-month" class="view page hidden">
+      <div class="page-header">
         <h1>Monthly Overview</h1>
       </div>
       <div class="month-grid" id="monthGrid"></div>
-      <p class="hint">Click a day to jump to that week</p>
+      <p class="hint">Click any day to switch to that week</p>
     </section>
 
-    <!-- SHOPPING -->
-    <section id="view-shop" class="view hidden">
-      <div class="viewHeader">
-        <h1>Shopping List — Week <span id="shopWeekNum">1</span></h1>
+    <!-- SHOPPING PAGE -->
+    <section id="view-shop" class="view page hidden">
+      <div class="page-header">
+        <h1>Shopping List – Week <span id="shopWeekNum">1</span></h1>
       </div>
 
       <div class="shop-notice">
-        <strong>Meal Prep Mode:</strong> Consider pre-cooking rice, proteins, and chopping veggies on Sunday.
+        <strong>Meal Prep Tip:</strong> Pre-cook rice/proteins and chop veggies on Sunday for easier weekdays.
       </div>
 
       <div class="shop-table-wrap">
@@ -80,7 +76,7 @@
           <thead>
             <tr>
               <th>Item</th>
-              <th>Qty</th>
+              <th>Quantity</th>
               <th>Notes</th>
             </tr>
           </thead>
@@ -88,13 +84,13 @@
         </table>
       </div>
 
-      <p class="hint">Always include: eggs, milk, bread. Prices are approximate — edit in data.js later.</p>
+      <p class="hint">Always stock: eggs, milk, bread. Edit quantities in data.js as needed.</p>
     </section>
 
   </main>
 
   <footer class="footer">
-    Local family planner • Data saved in browser
+    okubizzy family meal planner • saved locally in your browser
   </footer>
 
   <script src="data.js"></script>
