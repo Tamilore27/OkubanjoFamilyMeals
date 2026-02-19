@@ -1,1 +1,107 @@
-pok
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>okubizzy Family - Shopping</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">🍲</div>
+      <div>
+        <div class="title">okubizzy Family Meals</div>
+        <div class="subtitle">okubizzy family</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <button type="button" id="nextWeekBtn" class="tab">🎲 Next Week</button>
+      <a href="index.html" class="tab">Today</a>
+      <a href="week.html" class="tab">Week</a>
+      <a href="month.html" class="tab">Month</a>
+      <a href="shopping.html" class="tab active">Shopping</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="page-header">
+      <h1>Shopping List – Week <span id="shopWeekNum"></span></h1>
+    </div>
+
+    <div class="shop-notice">
+      <strong>Meal Prep Mode:</strong> Pre-cook rice, proteins, chop veggies on Sunday.
+    </div>
+
+    <table id="shopTable">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Qty</th>
+          <th>Unit</th>
+          <th>Store</th>
+          <th>Price Est.</th>
+        </tr>
+      </thead>
+      <tbody id="shopBody"></tbody>
+    </table>
+
+    <p class="hint">Estimates from data.js. Includes must-haves: eggs, milk, bread.</p>
+  </main>
+
+  <footer class="footer">
+    okubizzy meal planner
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    const weekIndex = getCurrentWeekIndex();
+    const week = MONTH_PLAN[weekIndex];
+    $('shopWeekNum').textContent = week.week;
+
+    const tbody = $('shopBody');
+    const agg = {};
+
+    week.days.forEach(d => {
+      [d.breakfast, d.lunch, d.dinner, d.kidsLunch].filter(Boolean).forEach(m => {
+        getIngredients(m).forEach(i => {
+          const key = i.name;
+          if (!agg[key]) agg[key] = { qty: 0, unit: i.unit, store: PRICE_BOOK[i.name]?.store || 'Walmart' };
+          agg[key].qty += i.qty;
+        });
+      });
+    });
+
+    // Add staples
+    STAPLES.forEach(s => {
+      const key = s.name;
+      if (!agg[key]) agg[key] = { qty: 0, unit: s.unit, store: s.store };
+      agg[key].qty += s.qty;
+    });
+
+    // Render table
+    Object.keys(agg).sort().forEach(key => {
+      const i = agg[key];
+      const pb = PRICE_BOOK[key] || { price: 0, packSize: 1 };
+      const packs = Math.ceil(i.qty / pb.packSize);
+      const price = packs * pb.price;
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${escapeHtml(key)}</td>
+        <td>${i.qty.toFixed(1)}</td>
+        <td>${i.unit}</td>
+        <td>${i.store}</td>
+        <td>$${price.toFixed(2)}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    $('nextWeekBtn').onclick = () => {
+      setCurrentWeekIndex(weekIndex + 1);
+      location.reload();
+    };
+  </script>
+</body>
+</html>
