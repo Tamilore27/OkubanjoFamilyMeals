@@ -1,261 +1,288 @@
-// ... (keep most of previous app.js)
-// ────────────────────────────────────────────────
-// HELPERS
+// app.js - okubizzy Family Meal Planner
 // ────────────────────────────────────────────────
 
 const $ = id => document.getElementById(id);
-
-function escapeHtml(str) {
-  return String(str || "").replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[m]);
-}
-
-function getMondayOfCurrentWeek(d = new Date()) {
-  const day = d.getDay();
-  const offset = (day === 0 ? -6 : 1 - day);
-  const m = new Date(d);
-  m.setDate(d.getDate() + offset);
-  m.setHours(0,0,0,0);
-  return m;
-}
-
-function weekdayIndexMondayFirst(date = new Date()) {
-  return (date.getDay() + 6) % 7; // Mon=0 ... Sun=6
-}
 
 // ────────────────────────────────────────────────
 // STATE
 // ────────────────────────────────────────────────
 
-let currentWeekIndex = 0; // 0..3
+let currentWeekIndex = 0; // 0 = Week 1, 1 = Week 2, etc.
 
-function loadWeek() {
-  return MONTH_PLAN[currentWeekIndex];
+// Load saved week preference
+function loadSavedWeek() {
+  const saved = localStorage.getItem('okubizzyCurrentWeek');
+  return saved !== null ? parseInt(saved, 10) : 0;
 }
 
-function saveWeekIndex() {
-  localStorage.setItem("familyMealWeek", currentWeekIndex);
-}
-
-function loadSavedWeekIndex() {
-  const saved = localStorage.getItem("familyMealWeek");
-  return saved ? parseInt(saved, 10) : 0;
+function saveCurrentWeek() {
+  localStorage.setItem('okubizzyCurrentWeek', currentWeekIndex);
 }
 
 // ────────────────────────────────────────────────
-// UI TABS
+// UI TABS / PAGE SWITCHING
 // ────────────────────────────────────────────────
 
 const views = {
-  today: $("view-today"),
-  week:  $("view-week"),
-  month: $("view-month"),
-  shop:  $("view-shop")
+  today:  $("view-today"),
+  week:   $("view-week"),
+  month:  $("view-month"),
+  shop:   $("view-shop")
 };
 
 const tabs = {
-  today: $("tab-today"),
-  week:  $("tab-week"),
-  month: $("tab-month"),
-  shop:  $("tab-shop")
+  today:  $("tab-today"),
+  week:   $("tab-week"),
+  month:  $("tab-month"),
+  shop:   $("tab-shop")
 };
 
 function setActiveTab(which) {
-  Object.entries(tabs).forEach(([k, el]) => el.classList.toggle("active", k === which));
-  Object.entries(views).forEach(([k, el]) => el.classList.toggle("hidden", k !== which));
+  // Update tab styles
+  Object.keys(tabs).forEach(key => {
+    tabs[key].classList.toggle('active', key === which);
+  });
 
-  if (which === "today" || which === "week") renderCurrentWeek();
-  if (which === "month") renderMonthView();
-  if (which === "shop")  renderShopping();
+  // Show/hide views
+  Object.keys(views).forEach(key => {
+    views[key].classList.toggle('hidden', key !== which);
+  });
+
+  // Re-render content when switching to certain views
+  if (which === 'today' || which === 'week') renderCurrentWeekContent();
+  if (which === 'month') renderMonthOverview();
+  if (which === 'shop')  renderShoppingList();
 }
 
-tabs.today.onclick = () => setActiveTab("today");
-tabs.week.onclick  = () => setActiveTab("week");
-tabs.month.onclick = () => setActiveTab("month");
-tabs.shop.onclick  = () => setActiveTab("shop");
+// Tab click handlers
+tabs.today.onclick = () => setActiveTab('today');
+tabs.week.onclick  = () => setActiveTab('week');
+tabs.month.onclick = () => setActiveTab('month');
+tabs.shop.onclick  = () => setActiveTab('shop');
 
 // ────────────────────────────────────────────────
-// RANDOMIZE (cycle weeks)
+// WEEK CYCLING ("Next Week" button)
 // ────────────────────────────────────────────────
 
 $("randBtn").onclick = () => {
   currentWeekIndex = (currentWeekIndex + 1) % MONTH_PLAN.length;
-  saveWeekIndex();
-  renderCurrentWeek();
-  if (!views.month.classList.contains("hidden")) renderMonthView();
-  if (!views.shop.classList.contains("hidden")) renderShopping();
-  setActiveTab("week");
+  saveCurrentWeek();
+  
+  // Refresh visible views
+  if (!views.today.classList.contains('hidden') || !views.week.classList.contains('hidden')) {
+    renderCurrentWeekContent();
+  }
+  if (!views.month.classList.contains('hidden')) {
+    renderMonthOverview();
+  }
+  if (!views.shop.classList.contains('hidden')) {
+    renderShoppingList();
+  }
+
+  // Switch to week view after changing
+  setActiveTab('week');
 };
 
 // ────────────────────────────────────────────────
-// RENDER TODAY
+// RENDER TODAY & WEEK CARDS
 // ────────────────────────────────────────────────
 
-function renderToday() {
-  const todayIdx = weekdayIndexMondayFirst(new Date());
-  const week = loadWeek();
-  const day = week.days[todayIdx];
-
-  $("todayTitle").textContent = "Today";
-  $("todayPill").textContent = `${day.day} • ${new Date().toLocaleDateString(undefined, { weekday:"long", month:"short", day:"numeric" })}`;
-
-  const wrap = $("todayCards");
-  wrap.innerHTML = "";
-
-  const totalKcal = renderDayCards(wrap, day, true);
-
-  $("todayCalTotal").innerHTML = `<strong>Estimated daily calories (family):</strong> ≈ ${totalKcal} kcal`;
+function getTodayDayIndex() {
+  const today = new Date().getDay(); // 0=Sun, 1=Mon, ..., 6=Sat
+  return (today === 0 ? 6 : today - 1); // Mon=0, Tue=1, ..., Sun=6
 }
 
-// ────────────────────────────────────────────────
-// RENDER WEEK
-// ────────────────────────────────────────────────
+function renderMealCard(type, mealName, isKids = false, kidsLunchName = '') {
+  const kcal = MEAL_KCAL[mealName] || 550;
+  const imgSrc = MEAL_IMAGES[mealName] || MEAL_IMAGES.default;
 
-function renderWeek() {
-  const week = loadWeek();
-  $("weekNumber").textContent = week.week;
+  const card = document.createElement('div');
+  card.className = 'card';
 
-  const tabsWrap = $("dayTabs");
-  tabsWrap.innerHTML = "";
-
-  let activeIdx = weekdayIndexMondayFirst(new Date());
-
-  week.days.forEach((d, i) => {
-    const b = document.createElement("button");
-    b.className = "dayTab" + (i === activeIdx ? " active" : "");
-    b.textContent = d.day.slice(0,3);
-    b.onclick = () => {
-      activeIdx = i;
-      [...tabsWrap.children].forEach((x,j) => x.classList.toggle("active", j===activeIdx));
-      renderWeekCards(activeIdx);
-    };
-    tabsWrap.appendChild(b);
-  });
-
-  renderWeekCards(activeIdx);
-}
-
-function renderWeekCards(idx) {
-  const week = loadWeek();
-  const day = week.days[idx];
-  const wrap = $("weekCards");
-  wrap.innerHTML = "";
-
-  const totalKcal = renderDayCards(wrap, day, false);
-
-  $("weekCalTotals").innerHTML = `<strong>${day.day} total:</strong> ≈ ${totalKcal} kcal`;
-}
-
-// Common card renderer (used by today & week)
-function renderDayCards(container, day, isToday = false) {
-  let totalKcal = 0;
-
-  const makeCard = (type, title, hasKids = false) => {
-    const kcal = MEAL_KCAL[title] || 550;
-    totalKcal += kcal;
-
-    const img = MEAL_IMAGES[title] || MEAL_IMAGES.default;
-
-    const card = document.createElement("div");
-    card.className = "card";
-
-    card.innerHTML = `
-      <div class="imgWrap">
-        <img class="mealImg" src="${img}" alt="${escapeHtml(title)}" loading="lazy">
-      </div>
-      <div class="cardTop">
-        <div>
-          <div class="mealType">${type}</div>
-          <div class="mealName">${escapeHtml(title)}</div>
-        </div>
-        <div class="kcal">${kcal} kcal</div>
-      </div>
-      <div class="details">
-        <h3>Ingredients</h3>
-        <p>(Click to see estimated ingredients — edit in data.js)</p>
+  let kidsHtml = '';
+  if (isKids && kidsLunchName) {
+    kidsHtml = `
+      <button type="button" class="kids-btn">Kids Lunch ▼</button>
+      <div class="kids-dropdown hidden">
+        <select class="kids-select">
+          <option selected disabled>Kids: ${escapeHtml(kidsLunchName)}</option>
+          <option>— same as family —</option>
+          <option>Extra ${escapeHtml(kidsLunchName)}</option>
+        </select>
       </div>
     `;
+  }
 
-    if (hasKids && day.kidsLunch) {
-      const kidsBtn = document.createElement("button");
-      kidsBtn.className = "kids-btn";
-      kidsBtn.textContent = "Kids Lunch ↓";
-      kidsBtn.onclick = (e) => {
-        e.stopPropagation();
-        alert(`Kids lunch for ${day.day}: ${day.kidsLunch}`);
-      };
-      card.querySelector(".cardTop").appendChild(kidsBtn);
+  card.innerHTML = `
+    <div class="imgWrap">
+      <img class="mealImg" src="${imgSrc}" alt="${escapeHtml(mealName)}" loading="lazy">
+    </div>
+    <div class="cardTop">
+      <div>
+        <div class="mealType">${type}</div>
+        <div class="mealName">${escapeHtml(mealName)}</div>
+      </div>
+      <div class="kcal">${kcal} kcal</div>
+    </div>
+    ${kidsHtml}
+    <div class="details">
+      <h3>Ingredients (estimated)</h3>
+      <p>→ Customize this section in data.js later</p>
+    </div>
+  `;
+
+  // Expand/collapse on card click (except when clicking kids button)
+  card.addEventListener('click', e => {
+    if (!e.target.closest('.kids-btn') && !e.target.closest('.kids-select')) {
+      card.classList.toggle('expanded');
     }
+  });
 
-    card.onclick = () => card.classList.toggle("expanded");
-    container.appendChild(card);
-  };
+  // Toggle kids dropdown
+  const kidsBtn = card.querySelector('.kids-btn');
+  if (kidsBtn) {
+    kidsBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const dropdown = card.querySelector('.kids-dropdown');
+      dropdown.classList.toggle('hidden');
+    });
+  }
 
-  makeCard("Breakfast", day.breakfast);
-  makeCard("Lunch",    day.lunch, true);
-  makeCard("Dinner",   day.dinner);
+  return { element: card, kcal };
+}
+
+function renderDayCards(container, dayPlan) {
+  let totalKcal = 0;
+
+  // Breakfast
+  const bf = renderMealCard('Breakfast', dayPlan.breakfast);
+  container.appendChild(bf.element);
+  totalKcal += bf.kcal;
+
+  // Lunch + kids
+  const lunch = renderMealCard('Lunch', dayPlan.lunch, true, dayPlan.kidsLunch);
+  container.appendChild(lunch.element);
+  totalKcal += lunch.kcal;
+
+  // Dinner
+  const dinner = renderMealCard('Dinner', dayPlan.dinner);
+  container.appendChild(dinner.element);
+  totalKcal += dinner.kcal;
 
   return totalKcal;
 }
 
+function renderCurrentWeekContent() {
+  const week = MONTH_PLAN[currentWeekIndex];
+  const todayIdx = getTodayDayIndex();
+  const todayPlan = week.days[todayIdx];
+
+  // Today view
+  $("todayPill").textContent = `${todayPlan.day} • ${new Date().toLocaleDateString('en-CA', {
+    weekday: 'long',
+    month: 'short',
+    day: 'numeric'
+  })}`;
+
+  const todayWrap = $("todayCards");
+  todayWrap.innerHTML = '';
+  const todayTotal = renderDayCards(todayWrap, todayPlan);
+  $("todayCalTotal").textContent = `Estimated daily total: ≈ ${todayTotal} kcal`;
+
+  // Week view
+  $("weekNumber").textContent = week.week;
+
+  const dayTabs = $("dayTabs");
+  dayTabs.innerHTML = '';
+
+  let activeDay = todayIdx;
+
+  week.days.forEach((d, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'dayTab' + (i === activeDay ? ' active' : '');
+    btn.textContent = d.day.slice(0,3);
+    btn.onclick = () => {
+      activeDay = i;
+      [...dayTabs.children].forEach((b, idx) => b.classList.toggle('active', idx === activeDay));
+      renderWeekDayCards(activeDay);
+    };
+    dayTabs.appendChild(btn);
+  });
+
+  renderWeekDayCards(activeDay);
+}
+
+function renderWeekDayCards(dayIndex) {
+  const week = MONTH_PLAN[currentWeekIndex];
+  const dayPlan = week.days[dayIndex];
+
+  const wrap = $("weekCards");
+  wrap.innerHTML = '';
+
+  const dayTotal = renderDayCards(wrap, dayPlan);
+  $("weekCalTotals").textContent = `${dayPlan.day} estimated total: ≈ ${dayTotal} kcal`;
+}
+
 // ────────────────────────────────────────────────
-// MONTH VIEW (small tiles)
+// MONTH OVERVIEW (small tiles)
 // ────────────────────────────────────────────────
 
-function renderMonthView() {
+function renderMonthOverview() {
   const grid = $("monthGrid");
-  grid.innerHTML = "";
+  grid.innerHTML = '';
 
-  MONTH_PLAN.forEach(w => {
-    const weekDiv = document.createElement("div");
-    weekDiv.className = "month-week";
+  MONTH_PLAN.forEach(week => {
+    const weekBlock = document.createElement('div');
+    weekBlock.className = 'month-week';
 
-    const title = document.createElement("div");
-    title.className = "month-week-title";
-    title.textContent = `Week ${w.week}`;
-    weekDiv.appendChild(title);
+    const title = document.createElement('div');
+    title.className = 'month-week-title';
+    title.textContent = `Week ${week.week}`;
+    weekBlock.appendChild(title);
 
-    w.days.forEach(d => {
-      const tile = document.createElement("div");
-      tile.className = "month-tile";
+    week.days.forEach((day, idx) => {
+      const tile = document.createElement('div');
+      tile.className = 'month-tile';
       tile.innerHTML = `
-        <div class="tile-day">${d.day}</div>
-        <div class="tile-meal">${escapeHtml(d.dinner || "—")}</div>
+        <div class="tile-day">${day.day}</div>
+        <div class="tile-meal">${escapeHtml(day.dinner || '—')}</div>
       `;
       tile.onclick = () => {
-        currentWeekIndex = w.week - 1;
-        saveWeekIndex();
-        setActiveTab("week");
+        currentWeekIndex = week.week - 1;
+        saveCurrentWeek();
+        setActiveTab('week');
       };
-      weekDiv.appendChild(tile);
+      weekBlock.appendChild(tile);
     });
 
-    grid.appendChild(weekDiv);
+    grid.appendChild(weekBlock);
   });
 }
 
 // ────────────────────────────────────────────────
-// SHOPPING LIST (simple aggregation + staples)
+// SHOPPING LIST
 // ────────────────────────────────────────────────
 
-function renderShopping() {
-  const week = loadWeek();
+function renderShoppingList() {
+  const week = MONTH_PLAN[currentWeekIndex];
   $("shopWeekNum").textContent = week.week;
 
-  const counts = {};
+  const mealCounts = {};
 
-  week.days.forEach(d => {
-    [d.breakfast, d.lunch, d.dinner, d.kidsLunch].forEach(meal => {
-      if (!meal) return;
-      counts[meal] = (counts[meal] || 0) + 1;
+  week.days.forEach(day => {
+    [day.breakfast, day.lunch, day.dinner, day.kidsLunch].forEach(meal => {
+      if (meal) {
+        mealCounts[meal] = (mealCounts[meal] || 0) + 1;
+      }
     });
   });
 
   const tbody = $("shopBody");
-  tbody.innerHTML = "";
+  tbody.innerHTML = '';
 
   // Staples first
   STAPLES.forEach(item => {
-    const tr = document.createElement("tr");
+    const tr = document.createElement('tr');
     tr.innerHTML = `
       <td><strong>${escapeHtml(item.name)}</strong></td>
       <td>${escapeHtml(item.qty)}</td>
@@ -265,8 +292,8 @@ function renderShopping() {
   });
 
   // Meals
-  Object.entries(counts).forEach(([meal, count]) => {
-    const tr = document.createElement("tr");
+  Object.entries(mealCounts).sort().forEach(([meal, count]) => {
+    const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${escapeHtml(meal)}</td>
       <td>${count}×</td>
@@ -277,85 +304,22 @@ function renderShopping() {
 }
 
 // ────────────────────────────────────────────────
-// INIT
+// UTILITIES
 // ────────────────────────────────────────────────
 
-currentWeekIndex = loadSavedWeekIndex() % MONTH_PLAN.length;
-
-renderToday();
-renderWeek();
-renderShopping();
-setActiveTab("today");
-// Update renderDayCards to use dropdown for kids lunch
-function renderDayCards(container, day, isToday = false) {
-  let totalKcal = 0;
-
-  const makeCard = (type, title, hasKids = false) => {
-    const kcal = MEAL_KCAL[title] || 550;
-    totalKcal += kcal;
-
-    const img = MEAL_IMAGES[title] || MEAL_IMAGES.default;
-
-    const card = document.createElement("div");
-    card.className = "card";
-
-    let kidsHtml = "";
-    if (hasKids && day.kidsLunch) {
-      kidsHtml = `
-        <div class="kids-dropdown hidden" id="kids-${type.toLowerCase()}">
-          <select class="kids-select">
-            <option selected disabled>Kids Lunch: ${escapeHtml(day.kidsLunch)}</option>
-            <option>— same as family —</option>
-            <option>Extra portion of ${escapeHtml(day.kidsLunch)}</option>
-          </select>
-        </div>
-      `;
-    }
-
-    card.innerHTML = `
-      <div class="imgWrap">
-        <img class="mealImg" src="${img}" alt="${escapeHtml(title)}" loading="lazy">
-      </div>
-      <div class="cardTop">
-        <div>
-          <div class="mealType">${type}</div>
-          <div class="mealName">${escapeHtml(title)}</div>
-        </div>
-        <div class="kcal">${kcal} kcal</div>
-      </div>
-      ${kidsHtml}
-      <div class="details">
-        <h3>Ingredients (estimated)</h3>
-        <p>Customize this list in data.js later</p>
-      </div>
-    `;
-
-    if (hasKids && day.kidsLunch) {
-      const kidsBtn = document.createElement("button");
-      kidsBtn.className = "kids-btn";
-      kidsBtn.textContent = "Kids Lunch ▼";
-      kidsBtn.onclick = (e) => {
-        e.stopPropagation();
-        const dropdown = card.querySelector(".kids-dropdown");
-        dropdown.classList.toggle("hidden");
-      };
-      card.querySelector(".cardTop").appendChild(kidsBtn);
-    }
-
-    card.onclick = (e) => {
-      if (!e.target.closest(".kids-btn") && !e.target.closest(".kids-select")) {
-        card.classList.toggle("expanded");
-      }
-    };
-
-    container.appendChild(card);
-  };
-
-  makeCard("Breakfast", day.breakfast);
-  makeCard("Lunch",    day.lunch, true);
-  makeCard("Dinner",   day.dinner);
-
-  return totalKcal;
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
 }
 
-// ... rest of app.js remains mostly the same
+// ────────────────────────────────────────────────
+// INITIALIZATION
+// ────────────────────────────────────────────────
+
+currentWeekIndex = loadSavedWeek() % MONTH_PLAN.length;
+
+// Initial render
+renderCurrentWeekContent();
+renderShoppingList();
+setActiveTab('today');
