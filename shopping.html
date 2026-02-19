@@ -1,102 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>okubizzy Family - Shopping</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<header class="topbar">
-  <div class="brand">
-    <div class="logo">🍲</div>
-    <div>
-      <div class="title">okubizzy Family Meals</div>
-      <div class="subtitle">okubizzy family</div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">🍲</div>
+      <div>
+        <div class="title">okubizzy Family Meals</div>
+        <div class="subtitle">okubizzy family</div>
+      </div>
     </div>
-  </div>
-  <nav class="nav">
-    <button type="button" class="tab" id="nextWeekBtn">🎲 Next Week</button>
-    <a href="index.html" class="tab">Today</a>
-    <a href="week.html" class="tab">Week</a>
-    <a href="month.html" class="tab">Month</a>
-    <a href="shopping.html" class="tab active">Shopping</a>
-  </nav>
-</header>
+    <nav class="nav">
+      <button type="button" id="nextWeekBtn" class="tab">🎲 Next Week</button>
+      <a href="index.html" class="tab">Today</a>
+      <a href="week.html" class="tab">Week</a>
+      <a href="month.html" class="tab">Month</a>
+      <a href="shopping.html" class="tab active">Shopping</a>
+    </nav>
+  </header>
 
-<main class="container">
-  <div class="page-header">
-    <h1>Shopping List – Week <span id="shopWeekNum"></span></h1>
-  </div>
+  <main class="container">
+    <div class="page-header">
+      <h1>Shopping List – Week <span id="shopWeekNum"></span></h1>
+    </div>
 
-  <div class="shop-notice">
-    <strong>Meal Prep Tip:</strong> Pre-cook rice/proteins and chop veggies on Sunday.
-  </div>
+    <div class="shop-notice">
+      <strong>Meal Prep Mode:</strong> Pre-cook rice, proteins, chop veggies on Sunday.
+    </div>
 
-  <div class="shop-table-wrap">
     <table id="shopTable">
       <thead>
         <tr>
           <th>Item</th>
-          <th>Quantity</th>
-          <th>Notes</th>
+          <th>Qty</th>
+          <th>Unit</th>
+          <th>Store</th>
+          <th>Price Est.</th>
         </tr>
       </thead>
       <tbody id="shopBody"></tbody>
     </table>
-  </div>
 
-  <p class="hint">Always keep eggs, milk, bread. You can change quantities in data.js later.</p>
-</main>
+    <p class="hint">Estimates from data.js. Includes must-haves: eggs, milk, bread.</p>
+  </main>
 
-<footer class="footer">
-  okubizzy family meal planner • saved on this computer
-</footer>
+  <footer class="footer">
+    okubizzy meal planner
+  </footer>
 
-<script src="data.js"></script>
-<script src="app.js"></script>
-<script>
-// ── SHOPPING PAGE ONLY ───────────────────────────────────
-const weekIndex = getCurrentWeekIndex();
-const week = MONTH_PLAN[weekIndex];
-document.getElementById("shopWeekNum").textContent = week.week;
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    const weekIndex = getCurrentWeekIndex();
+    const week = MONTH_PLAN[weekIndex];
+    $('shopWeekNum').textContent = week.week;
 
-const counts = {};
+    const tbody = $('shopBody');
+    const agg = {};
 
-week.days.forEach(d => {
-  [d.breakfast, d.lunch, d.dinner, d.kidsLunch].forEach(m => {
-    if (m) counts[m] = (counts[m] || 0) + 1;
-  });
-});
+    week.days.forEach(d => {
+      [d.breakfast, d.lunch, d.dinner, d.kidsLunch].filter(Boolean).forEach(m => {
+        getIngredients(m).forEach(i => {
+          const key = i.name;
+          if (!agg[key]) agg[key] = { qty: 0, unit: i.unit, store: PRICE_BOOK[i.name]?.store || 'Walmart' };
+          agg[key].qty += i.qty;
+        });
+      });
+    });
 
-const tbody = document.getElementById("shopBody");
+    // Add staples
+    STAPLES.forEach(s => {
+      const key = s.name;
+      if (!agg[key]) agg[key] = { qty: 0, unit: s.unit, store: s.store };
+      agg[key].qty += s.qty;
+    });
 
-STAPLES.forEach(item => {
-  const tr = document.createElement("tr");
-  tr.innerHTML = `
-    <td><strong>${escapeHtml(item.name)}</strong></td>
-    <td>${escapeHtml(item.qty)}</td>
-    <td>${escapeHtml(item.note)}</td>
-  `;
-  tbody.appendChild(tr);
-});
+    // Render table
+    Object.keys(agg).sort().forEach(key => {
+      const i = agg[key];
+      const pb = PRICE_BOOK[key] || { price: 0, packSize: 1 };
+      const packs = Math.ceil(i.qty / pb.packSize);
+      const price = packs * pb.price;
 
-Object.keys(counts).sort().forEach(meal => {
-  const tr = document.createElement("tr");
-  tr.innerHTML = `
-    <td>${escapeHtml(meal)}</td>
-    <td>${counts[meal]}×</td>
-    <td>—</td>
-  `;
-  tbody.appendChild(tr);
-});
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${escapeHtml(key)}</td>
+        <td>${i.qty.toFixed(1)}</td>
+        <td>${i.unit}</td>
+        <td>${i.store}</td>
+        <td>$${price.toFixed(2)}</td>
+      `;
+      tbody.appendChild(tr);
+    });
 
-document.getElementById("nextWeekBtn").onclick = () => {
-  setCurrentWeekIndex(weekIndex + 1);
-  window.location.reload();
-};
-</script>
-
+    $('nextWeekBtn').onclick = () => {
+      setCurrentWeekIndex(weekIndex + 1);
+      location.reload();
+    };
+  </script>
 </body>
 </html>
