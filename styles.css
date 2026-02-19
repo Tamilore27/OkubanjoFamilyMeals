@@ -1,54 +1,98 @@
-body {
-  font-family: system-ui, -apple-system, sans-serif;
-  background: #f5f7fb;
-  margin: 0;
-}
-
-.header {
-  background: #fff;
-  padding: 12px 20px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-}
-
-.nav-buttons button {
-  margin-right: 6px;
-  padding: 8px 14px;
-  border-radius: 10px;
-  border: none;
-  background: #6b7cff;
-  color: #fff;
-  cursor: pointer;
-}
-
-.meal-section {
-  background: #fff;
-  margin: 15px;
-  padding: 16px;
-  border-radius: 16px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
-
-.meal-content, #kidsMenu {
-  margin-top: 10px;
-  line-height: 1.6;
-}
-
-.hidden {
-  display: none;
-}
-
-.month-tiles {
+/* Month view */
+.month-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
-  margin-top: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
 }
 
-.month-tiles div {
-  background: #eef1ff;
-  padding: 8px;
-  border-radius: 10px;
-  font-size: 12px;
+.month-week {
+  border: 1px solid rgba(17,24,39,0.12);
+  border-radius: 12px;
+  padding: 12px;
+  background: rgba(255,255,255,0.7);
+}
+
+.month-week-title {
+  font-weight: 900;
   text-align: center;
+  margin-bottom: 10px;
+  color: rgba(17,24,39,0.9);
+}
+
+.month-tile {
+  padding: 10px;
+  margin: 4px 0;
+  background: rgba(255,255,255,0.85);
+  border-radius: 10px;
   cursor: pointer;
+  transition: all 0.15s;
+}
+
+.month-tile:hover {
+  background: rgba(255,182,193,0.4);
+  transform: scale(1.02);
+}
+
+.tile-day {
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.tile-meal {
+  font-size: 12px;
+  color: rgba(17,24,39,0.75);
+  margin-top: 4px;
+}
+
+/* Calorie totals */
+.cal-total, .cal-totals {
+  margin: 12px 0;
+  padding: 10px 14px;
+  background: rgba(255,250,205,0.6);
+  border-radius: 12px;
+  font-weight: 800;
+  text-align: center;
+}
+
+/* Kids button */
+.kids-btn {
+  font-size: 11px;
+  padding: 4px 8px;
+  background: rgba(173,216,230,0.7);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+/* Shopping table */
+.shop-table-wrap {
+  overflow-x: auto;
+}
+
+#shopTable {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(255,255,255,0.85);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+#shopTable th, #shopTable td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(17,24,39,0.08);
+  text-align: left;
+}
+
+#shopTable th {
+  background: rgba(255,182,193,0.4);
+  font-weight: 900;
+}
+
+.shop-notice {
+  margin: 16px 0;
+  padding: 12px;
+  background: rgba(173,216,230,0.3);
+  border-radius: 12px;
+  font-size: 14px;
 }
