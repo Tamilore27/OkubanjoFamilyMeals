@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>okubizzy Family - Month</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">🍲</div>
+    <div>
+      <div class="title">okubizzy Family Meals</div>
+      <div class="subtitle">okubizzy family</div>
+    </div>
+  </div>
+  <nav class="nav">
+    <button type="button" class="tab" id="nextWeekBtn">🎲 Next Week</button>
+    <a href="index.html" class="tab">Today</a>
+    <a href="week.html" class="tab">Week</a>
+    <a href="month.html" class="tab active">Month</a>
+    <a href="shopping.html" class="tab">Shopping</a>
+  </nav>
+</header>
+
+<main class="container">
+  <div class="page-header">
+    <h1>Monthly Overview</h1>
+  </div>
+
+  <div class="month-grid" id="monthGrid"></div>
+
+  <p class="hint">Click any day to go to that week</p>
+</main>
+
+<footer class="footer">
+  okubizzy family meal planner • saved on this computer
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+// ── MONTH PAGE ONLY ──────────────────────────────────────
+const grid = document.getElementById("monthGrid");
+
+MONTH_PLAN.forEach(weekPlan => {
+  const weekDiv = document.createElement("div");
+  weekDiv.className = "month-week";
+
+  const title = document.createElement("div");
+  title.className = "month-week-title";
+  title.textContent = "Week " + weekPlan.week;
+  weekDiv.appendChild(title);
+
+  weekPlan.days.forEach(day => {
+    const tile = document.createElement("div");
+    tile.className = "month-tile";
+    tile.innerHTML = `
+      <div class="tile-day">${day.day}</div>
+      <div class="tile-meal">${escapeHtml(day.dinner || "—")}</div>
+    `;
+    tile.onclick = () => {
+      setCurrentWeekIndex(weekPlan.week - 1);
+      window.location.href = "week.html";
+    };
+    weekDiv.appendChild(tile);
+  });
+
+  grid.appendChild(weekDiv);
+});
+
+document.getElementById("nextWeekBtn").onclick = () => {
+  const idx = getCurrentWeekIndex();
+  setCurrentWeekIndex(idx + 1);
+  window.location.reload();
+};
+</script>
+
+</body>
+</html>
