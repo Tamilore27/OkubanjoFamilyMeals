@@ -1,82 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>okubizzy Family - Month</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<header class="topbar">
-  <div class="brand">
-    <div class="logo">🍲</div>
-    <div>
-      <div class="title">okubizzy Family Meals</div>
-      <div class="subtitle">okubizzy family</div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">🍲</div>
+      <div>
+        <div class="title">okubizzy Family Meals</div>
+        <div class="subtitle">okubizzy family</div>
+      </div>
     </div>
-  </div>
-  <nav class="nav">
-    <button type="button" class="tab" id="nextWeekBtn">🎲 Next Week</button>
-    <a href="index.html" class="tab">Today</a>
-    <a href="week.html" class="tab">Week</a>
-    <a href="month.html" class="tab active">Month</a>
-    <a href="shopping.html" class="tab">Shopping</a>
-  </nav>
-</header>
+    <nav class="nav">
+      <button type="button" id="nextWeekBtn" class="tab">🎲 Next Week</button>
+      <a href="index.html" class="tab">Today</a>
+      <a href="week.html" class="tab">Week</a>
+      <a href="month.html" class="tab active">Month</a>
+      <a href="shopping.html" class="tab">Shopping</a>
+    </nav>
+  </header>
 
-<main class="container">
-  <div class="page-header">
-    <h1>Monthly Overview</h1>
-  </div>
+  <main class="container">
+    <div class="page-header">
+      <h1>Monthly Overview</h1>
+    </div>
+    <div id="monthGrid" class="month-grid"></div>
+    <p class="hint">Click a day to see week</p>
+  </main>
 
-  <div class="month-grid" id="monthGrid"></div>
+  <footer class="footer">
+    okubizzy meal planner
+  </footer>
 
-  <p class="hint">Click any day to go to that week</p>
-</main>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    const grid = $('monthGrid');
 
-<footer class="footer">
-  okubizzy family meal planner • saved on this computer
-</footer>
+    MONTH_PLAN.forEach(w => {
+      const weekDiv = document.createElement('div');
+      weekDiv.className = 'month-week';
 
-<script src="data.js"></script>
-<script src="app.js"></script>
-<script>
-// ── MONTH PAGE ONLY ──────────────────────────────────────
-const grid = document.getElementById("monthGrid");
+      const title = document.createElement('div');
+      title.className = 'month-week-title';
+      title.textContent = 'Week ' + w.week;
+      weekDiv.appendChild(title);
 
-MONTH_PLAN.forEach(weekPlan => {
-  const weekDiv = document.createElement("div");
-  weekDiv.className = "month-week";
+      w.days.forEach(d => {
+        const tile = document.createElement('div');
+        tile.className = 'month-tile';
+        tile.innerHTML = `
+          <div class="tile-day">${d.day}</div>
+          <div class="tile-meal">${escapeHtml(d.dinner || '—')}</div>
+        `;
+        tile.onclick = () => {
+          setCurrentWeekIndex(w.week - 1);
+          location.href = 'week.html';
+        };
+        weekDiv.appendChild(tile);
+      });
 
-  const title = document.createElement("div");
-  title.className = "month-week-title";
-  title.textContent = "Week " + weekPlan.week;
-  weekDiv.appendChild(title);
+      grid.appendChild(weekDiv);
+    });
 
-  weekPlan.days.forEach(day => {
-    const tile = document.createElement("div");
-    tile.className = "month-tile";
-    tile.innerHTML = `
-      <div class="tile-day">${day.day}</div>
-      <div class="tile-meal">${escapeHtml(day.dinner || "—")}</div>
-    `;
-    tile.onclick = () => {
-      setCurrentWeekIndex(weekPlan.week - 1);
-      window.location.href = "week.html";
+    $('nextWeekBtn').onclick = () => {
+      setCurrentWeekIndex(getCurrentWeekIndex() + 1);
+      location.reload();
     };
-    weekDiv.appendChild(tile);
-  });
-
-  grid.appendChild(weekDiv);
-});
-
-document.getElementById("nextWeekBtn").onclick = () => {
-  const idx = getCurrentWeekIndex();
-  setCurrentWeekIndex(idx + 1);
-  window.location.reload();
-};
-</script>
-
+  </script>
 </body>
 </html>
