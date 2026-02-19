@@ -1,96 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>okubizzy Family - Week</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<header class="topbar">
-  <div class="brand">
-    <div class="logo">🍲</div>
-    <div>
-      <div class="title">okubizzy Family Meals</div>
-      <div class="subtitle">okubizzy family</div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">🍲</div>
+      <div>
+        <div class="title">okubizzy Family Meals</div>
+        <div class="subtitle">okubizzy family</div>
+      </div>
     </div>
-  </div>
-  <nav class="nav">
-    <button type="button" class="tab" id="nextWeekBtn">🎲 Next Week</button>
-    <a href="index.html" class="tab">Today</a>
-    <a href="week.html" class="tab active">Week</a>
-    <a href="month.html" class="tab">Month</a>
-    <a href="shopping.html" class="tab">Shopping</a>
-  </nav>
-</header>
+    <nav class="nav">
+      <button type="button" id="nextWeekBtn" class="tab">🎲 Next Week</button>
+      <a href="index.html" class="tab">Today</a>
+      <a href="week.html" class="tab active">Week</a>
+      <a href="month.html" class="tab">Month</a>
+      <a href="shopping.html" class="tab">Shopping</a>
+    </nav>
+  </header>
 
-<main class="container">
-  <div class="page-header">
-    <h1>This Week’s Plan</h1>
-    <div class="pill">Week <span id="weekNumber"></span></div>
-  </div>
+  <main class="container">
+    <div class="page-header">
+      <h1>This Week’s Plan</h1>
+      <div class="pill">Week <span id="weekNumber"></span></div>
+    </div>
+    <div id="weekCalTotals" class="cal-totals"></div>
+    <div id="dayTabs" class="dayTabs"></div>
+    <div id="weekCards" class="cards"></div>
+    <p class="hint">Select a day above</p>
+  </main>
 
-  <div id="weekCalTotals" class="cal-totals"></div>
-  <div class="dayTabs" id="dayTabs"></div>
-  <div class="cards" id="weekCards"></div>
+  <footer class="footer">
+    okubizzy meal planner
+  </footer>
 
-  <p class="hint">Click a day above • tap cards for details</p>
-</main>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    const weekIndex = getCurrentWeekIndex();
+    const week = MONTH_PLAN[weekIndex];
+    $('weekNumber').textContent = week.week + 1; // 0-based to 1
 
-<footer class="footer">
-  okubizzy family meal planner • saved on this computer
-</footer>
+    const dayTabs = $('dayTabs');
+    let activeIdx = getTodayIndex();
 
-<script src="data.js"></script>
-<script src="app.js"></script>
-<script>
-// ── WEEK PAGE ONLY ───────────────────────────────────────
-const weekIndex = getCurrentWeekIndex();
-const week = MONTH_PLAN[weekIndex];
-document.getElementById("weekNumber").textContent = week.week;
+    week.days.forEach((d, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'dayTab' + (i === activeIdx ? ' active' : '');
+      btn.textContent = d.day.slice(0,3);
+      btn.onclick = () => {
+        activeIdx = i;
+        [...dayTabs.children].forEach((b, j) => b.classList.toggle('active', j === i));
+        renderDay(i);
+      };
+      dayTabs.appendChild(btn);
+    });
 
-const tabs = document.getElementById("dayTabs");
-let currentDay = 0;
+    function renderDay(i) {
+      const day = week.days[i];
+      const cards = $('weekCards');
+      cards.innerHTML = '';
+      let total = 0;
 
-week.days.forEach((day, i) => {
-  const btn = document.createElement("button");
-  btn.className = "dayTab" + (i === currentDay ? " active" : "");
-  btn.textContent = day.day.substring(0,3);
-  btn.onclick = () => {
-    currentDay = i;
-    [...tabs.children].forEach((b, idx) => b.classList.toggle("active", idx === currentDay));
-    showDay(i);
-  };
-  tabs.appendChild(btn);
-});
+      cards.appendChild(renderMealCard('Breakfast', day.breakfast));
+      total += MEAL_KCAL[day.breakfast] || 550;
 
-function showDay(idx) {
-  const day = week.days[idx];
-  const container = document.getElementById("weekCards");
-  container.innerHTML = "";
-  let total = 0;
+      cards.appendChild(renderMealCard('Lunch', day.lunch, day.kidsLunch));
+      total += MEAL_KCAL[day.lunch] || 550;
 
-  container.appendChild(renderMealCard("Breakfast", day.breakfast));
-  total += MEAL_KCAL[day.breakfast] || 550;
+      cards.appendChild(renderMealCard('Dinner', day.dinner));
+      total += MEAL_KCAL[day.dinner] || 550;
 
-  container.appendChild(renderMealCard("Lunch", day.lunch, true, day.kidsLunch));
-  total += MEAL_KCAL[day.lunch] || 550;
+      $('weekCalTotals').textContent = day.day + ' calories: ~' + total + ' kcal';
+    }
 
-  container.appendChild(renderMealCard("Dinner", day.dinner));
-  total += MEAL_KCAL[day.dinner] || 550;
+    renderDay(activeIdx);
 
-  document.getElementById("weekCalTotals").textContent =
-    day.day + " estimated total: ≈ " + total + " kcal";
-}
-
-showDay(currentDay);
-
-document.getElementById("nextWeekBtn").onclick = () => {
-  setCurrentWeekIndex(weekIndex + 1);
-  window.location.reload();
-};
-</script>
-
+    $('nextWeekBtn').onclick = () => {
+      setCurrentWeekIndex(weekIndex + 1);
+      location.reload();
+    };
+  </script>
 </body>
 </html>
