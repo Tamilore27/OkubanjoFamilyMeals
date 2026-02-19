@@ -2,22 +2,62 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Okubizzy Meal Planner</title>
-  <link rel="stylesheet" href="styles.css" />
+  <title>Family Meals</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header class="header">
-    <h1>Okubizzy Meal Planner</h1>
-    <div class="tabs">
-      <button class="tab active" id="tabToday">Today</button>
-      <button class="tab" id="tabWeek">Week</button>
-      <button class="tab" id="tabShopping">Shopping List</button>
+    <h1>Family Meals</h1>
+
+    <div class="nav-buttons">
+      <button id="randomizeBtn">Randomize</button>
+      <button id="todayBtn">Today</button>
+      <button id="weekBtn">Week</button>
+      <button id="monthBtn">Month</button>
+      <button id="shoppingBtn">Shopping List</button>
     </div>
-    <button id="generateWeekBtn" class="pill primary">Generate New Week</button>
+
+    <div id="monthTiles" class="month-tiles hidden"></div>
   </header>
 
-  <div class="week-days" id="weekDays"></div>
-  <main id="app"></main>
+  <main>
+    <h2 id="viewTitle"></h2>
+
+    <section class="meal-section" id="breakfast">
+      <h3>Breakfast</h3>
+      <button class="ingredientsBtn">Ingredients</button>
+      <div class="meal-content"></div>
+    </section>
+
+    <section class="meal-section" id="lunch">
+      <h3>Lunch</h3>
+      <button class="ingredientsBtn">Ingredients</button>
+      <button id="kidsMenuBtn">Kids Menu</button>
+      <div class="meal-content"></div>
+      <div id="kidsMenu" class="hidden"></div>
+    </section>
+
+    <section class="meal-section" id="dinner">
+      <h3>Dinner</h3>
+      <button class="ingredientsBtn">Ingredients</button>
+      <div class="meal-content"></div>
+    </section>
+
+    <section class="meal-section hidden" id="shoppingList">
+      <h3>Shopping List (Monthly)</h3>
+      <ul id="shoppingItems"></ul>
+    </section>
+
+    <section class="meal-section hidden" id="mealPrep">
+      <h3>Meal Prep Mode</h3>
+      <p>Prep proteins, chop veggies, portion rice/pasta for the week.</p>
+    </section>
+
+    <section class="meal-section" id="calories">
+      <h3>Daily Calories</h3>
+      <div id="calorieTotal"></div>
+    </section>
+  </main>
 
   <script src="app.js"></script>
 </body>
