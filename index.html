@@ -1,99 +1,84 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>okubizzy Family Meal Planner</title>
-  <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>okubizzy Family - Today</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <header class="topbar">
-    <div class="brand">
-      <div class="logo">🍲</div>
-      <div>
-        <div class="title">okubizzy Family Meals</div>
-        <div class="subtitle">okubizzy family</div>
-      </div>
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">🍲</div>
+    <div>
+      <div class="title">okubizzy Family Meals</div>
+      <div class="subtitle">okubizzy family</div>
     </div>
+  </div>
+  <nav class="nav">
+    <button type="button" class="tab" id="nextWeekBtn">🎲 Next Week</button>
+    <a href="index.html" class="tab active">Today</a>
+    <a href="week.html" class="tab">Week</a>
+    <a href="month.html" class="tab">Month</a>
+    <a href="shopping.html" class="tab">Shopping</a>
+  </nav>
+</header>
 
-    <nav class="nav">
-      <button class="tab" id="randBtn">🎲 Next Week</button>
-      <button class="tab active" id="tab-today">Today</button>
-      <button class="tab" id="tab-week">Week</button>
-      <button class="tab" id="tab-month">Month</button>
-      <button class="tab" id="tab-shop">Shopping</button>
-    </nav>
-  </header>
+<main class="container">
+  <div class="page-header">
+    <h1>Today’s Meals</h1>
+    <div class="pill" id="todayPill"></div>
+  </div>
 
-  <main class="container">
+  <div id="todayCalTotal" class="cal-total"></div>
+  <div id="todayCards" class="grid"></div>
 
-    <!-- TODAY PAGE -->
-    <section id="view-today" class="view page">
-      <div class="page-header">
-        <h1>Today’s Meals</h1>
-        <div class="pill" id="todayPill"></div>
-      </div>
-      <div id="todayCalTotal" class="cal-total"></div>
-      <div id="todayCards" class="grid"></div>
-      <p class="hint">Tap a card to expand details</p>
-    </section>
+  <p class="hint">Tap a card to see more details</p>
+</main>
 
-    <!-- WEEK PAGE -->
-    <section id="view-week" class="view page hidden">
-      <div class="page-header">
-        <h1>This Week’s Plan</h1>
-        <div class="pill">Week <span id="weekNumber">1</span></div>
-      </div>
-      <div id="weekCalTotals" class="cal-totals"></div>
-      <div class="dayTabs" id="dayTabs"></div>
-      <div class="cards" id="weekCards"></div>
-      <p class="hint">Select a day above • click cards for ingredients & kids options</p>
-    </section>
+<footer class="footer">
+  okubizzy family meal planner • saved on this computer
+</footer>
 
-    <!-- MONTH PAGE -->
-    <section id="view-month" class="view page hidden">
-      <div class="page-header">
-        <h1>Monthly Overview</h1>
-      </div>
-      <div class="month-grid" id="monthGrid"></div>
-      <p class="hint">Click any day to switch to that week</p>
-    </section>
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+// ── TODAY PAGE ONLY ──────────────────────────────────────
+const weekIndex = getCurrentWeekIndex();
+const week = MONTH_PLAN[weekIndex];
+const todayNumber = new Date().getDay();
+const todayIndex = todayNumber === 0 ? 6 : todayNumber - 1;
+const today = week.days[todayIndex];
 
-    <!-- SHOPPING PAGE -->
-    <section id="view-shop" class="view page hidden">
-      <div class="page-header">
-        <h1>Shopping List – Week <span id="shopWeekNum">1</span></h1>
-      </div>
+document.getElementById("todayPill").textContent =
+  today.day + " • " + new Date().toLocaleDateString("en-CA", {
+    weekday: "long",
+    month: "short",
+    day: "numeric"
+  });
 
-      <div class="shop-notice">
-        <strong>Meal Prep Tip:</strong> Pre-cook rice/proteins and chop veggies on Sunday for easier weekdays.
-      </div>
+const container = document.getElementById("todayCards");
+let totalKcal = 0;
 
-      <div class="shop-table-wrap">
-        <table id="shopTable">
-          <thead>
-            <tr>
-              <th>Item</th>
-              <th>Quantity</th>
-              <th>Notes</th>
-            </tr>
-          </thead>
-          <tbody id="shopBody"></tbody>
-        </table>
-      </div>
+container.appendChild(renderMealCard("Breakfast", today.breakfast));
+totalKcal += MEAL_KCAL[today.breakfast] || 550;
 
-      <p class="hint">Always stock: eggs, milk, bread. Edit quantities in data.js as needed.</p>
-    </section>
+container.appendChild(renderMealCard("Lunch", today.lunch, true, today.kidsLunch));
+totalKcal += MEAL_KCAL[today.lunch] || 550;
 
-  </main>
+container.appendChild(renderMealCard("Dinner", today.dinner));
+totalKcal += MEAL_KCAL[today.dinner] || 550;
 
-  <footer class="footer">
-    okubizzy family meal planner • saved locally in your browser
-  </footer>
+document.getElementById("todayCalTotal").textContent =
+  "Estimated daily total: ≈ " + totalKcal + " kcal";
 
-  <script src="data.js"></script>
-  <script src="app.js"></script>
+// Next week button
+document.getElementById("nextWeekBtn").onclick = () => {
+  setCurrentWeekIndex(weekIndex + 1);
+  window.location.reload();
+};
+</script>
+
 </body>
 </html>
